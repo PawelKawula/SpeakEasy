@@ -72,12 +72,12 @@ class SpeakEasyFrame extends JFrame
         friendsListPanel = new JPanel();
         JScrollPane friendsListScrollPane = new JScrollPane(friendsListPanel);
         friendsPanel.add(friendsListScrollPane, BorderLayout.CENTER);
-        GridBagConstraints friendsListPanelGBC = new GridBagConstraints();
-        friendsListPanelGBC.anchor = GridBagConstraints.FIRST_LINE_START;
-        GridBagLayout friendsListPanelGBL = new GridBagLayout();
-        friendsListPanelGBL.setConstraints(friendsListPanel, friendsListPanelGBC);
-        friendsListPanel.setLayout(friendsListPanelGBL);
+        friendsListPanel.setLayout(new GridBagLayout());
         friendsListPanel.setBorder(BorderFactory.createTitledBorder("friendsListPanel"));
+        GridBagConstraints labelGBC = new GridBagConstraints();
+        labelGBC.weighty = 1;
+        labelGBC.weightx = 0.01;
+        friendsListPanel.add(new JLabel(""), labelGBC);
 
         friendsInputPanel = new JPanel();
         friendsPanel.add(friendsInputPanel, BorderLayout.SOUTH);
@@ -94,12 +94,8 @@ class SpeakEasyFrame extends JFrame
                 friendPanel.setBorder(BorderFactory.createTitledBorder("friend"));
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridy = friendsListPanel.getComponentCount();
-                gbc.gridheight = 1;
-                gbc.gridx = 0;
-                gbc.weightx = 1;
-                gbc.insets = new Insets(5, 5, 5, 5);
                 gbc.anchor = GridBagConstraints.NORTH;
-                gbc.fill = GridBagConstraints.CENTER;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
 
                 friendsListPanel.add(friendPanel, gbc);
                 friendsPanel.revalidate();
