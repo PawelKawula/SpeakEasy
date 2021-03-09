@@ -2,7 +2,6 @@ package com.speakeasy;
 
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 public class SpeakEasy
@@ -27,7 +26,7 @@ public class SpeakEasy
 class SpeakEasyFrame extends JFrame
 {
     JPanel chatPanel;
-    JPanel chatBoxPanel;
+    ChatBoxPanel chatBoxPanel;
     JPanel chatInputPanel;
     JPanel friendsPanel;
     JPanel friendsListPanel;
@@ -48,7 +47,7 @@ class SpeakEasyFrame extends JFrame
         chatPanel.setLayout(new BorderLayout());
         chatPanel.setBorder(BorderFactory.createTitledBorder("chatPanel"));
 
-        chatBoxPanel = new JPanel();
+        chatBoxPanel = new ChatBoxPanel();
         chatPanel.add(chatBoxPanel, BorderLayout.CENTER);
 
         chatInputPanel = new JPanel();
