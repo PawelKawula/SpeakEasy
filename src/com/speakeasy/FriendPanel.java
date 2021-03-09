@@ -4,11 +4,12 @@ import com.speakeasy.logic.Friend;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class FriendPanel extends JPanel
 {
     JButton deleteButton;
-    JLabel friendLabel;
+    JButton friendButton;
     Friend friend;
 
     public FriendPanel(String nickname)
@@ -16,17 +17,16 @@ public class FriendPanel extends JPanel
         setLayout(new BorderLayout());
         friend = new Friend(nickname);
         deleteButton = new JButton("X");
-        friendLabel = new JLabel(nickname);
-        deleteButton.addActionListener((event) ->
-            {
-                JPanel friendPanelList = (JPanel) ((JButton) (event.getSource())).getParent().getParent();
-                friendPanelList.remove(FriendPanel.this);
-                friendPanelList.revalidate();
-                friendPanelList.repaint();
-            });
-        add(friendLabel, BorderLayout.CENTER);
+        friendButton = new JButton(nickname);
+
+        add(friendButton, BorderLayout.CENTER);
         add(deleteButton, BorderLayout.EAST);
     }
+
+   public void addDeleteButtonActionListener(ActionListener listener)
+   {
+       deleteButton.addActionListener(listener);
+   }
 
     public String getNickname()
     {
@@ -36,7 +36,7 @@ public class FriendPanel extends JPanel
     public void setNickname(String nickname)
     {
         friend.setNickname(nickname);
-        friendLabel.setText(nickname);
+        friendButton.setText(nickname);
     }
 
 }

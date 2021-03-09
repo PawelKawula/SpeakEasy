@@ -48,7 +48,7 @@ class SpeakEasyFrame extends JFrame
         chatPanel.setBorder(BorderFactory.createTitledBorder("chatPanel"));
 
         chatBoxPanel = new ChatBoxPanel();
-        chatPanel.add(chatBoxPanel, BorderLayout.CENTER);
+        chatPanel.add(new JScrollPane(chatBoxPanel), BorderLayout.CENTER);
 
         chatInputPanel = new JPanel();
         chatPanel.add(chatInputPanel, BorderLayout.SOUTH);
@@ -90,6 +90,12 @@ class SpeakEasyFrame extends JFrame
         friendsSubmit.addActionListener((event) ->
             {
                 FriendPanel friendPanel = new FriendPanel(friendsInput.getText());
+                friendPanel.addDeleteButtonActionListener((deleteButtonEvent) ->
+                    {
+                        friendsListPanel.remove(friendPanel);
+                        friendsListPanel.revalidate();
+                        friendsListPanel.repaint();
+                    });
                 friendPanel.setBorder(BorderFactory.createTitledBorder("friend"));
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridy = friendsListPanel.getComponentCount();
@@ -97,11 +103,12 @@ class SpeakEasyFrame extends JFrame
                 gbc.fill = GridBagConstraints.HORIZONTAL;
 
                 friendsListPanel.add(friendPanel, gbc);
-                friendsPanel.revalidate();
-                friendsPanel.repaint();
+                friendsListPanel.revalidate();
+                friendsListPanel.repaint();
             });
 
         pack();
+        chatBoxPanel.setBubbles();
     }
 
     @Override

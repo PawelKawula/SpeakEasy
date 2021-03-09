@@ -1,19 +1,20 @@
 package com.speakeasy.logic;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.*;
 
 public class Friend
 {
     String nickname;
 
-    ArrayList<String> myMessages;
-    ArrayList<String> friendMessages;
+    Map<LocalDate, String> myMessages;
+    Map<LocalDate, String> friendMessages;
 
     public Friend(String nickname)
     {
         this.nickname = nickname;
-        this.myMessages = new ArrayList<>();
-        this.friendMessages = new ArrayList<>();
+        this.myMessages = new TreeMap<>();
+        this.friendMessages = new TreeMap<>();
     }
 
     public String getNickname()
@@ -26,23 +27,23 @@ public class Friend
         this.nickname = nickname;
     }
 
-    public ArrayList<String> getMyMessages()
+    public Map<LocalDate, String> getMyMessages()
     {
         return myMessages;
     }
 
-    public ArrayList<String> getFriendMessages()
+    public Map<LocalDate, String> getFriendMessages()
     {
         return friendMessages;
     }
 
     public void addMyMessage(String message)
     {
-        myMessages.add(message);
+        myMessages.put(LocalDate.now(), message);
     }
 
     public void addFriendMessage(String message)
     {
-        friendMessages.add(message);
+        friendMessages.put(LocalDate.now(), message);
     }
 }

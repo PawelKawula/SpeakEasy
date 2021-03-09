@@ -1,62 +1,68 @@
 package com.speakeasy;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
+import java.time.LocalDate;
 
 public class Bubble extends JPanel
 {
-    String message;
-    ArrayList<Line> lines;
-    double maxWidth;
+    int maxWidth;
+    String unformattedMessage;
     boolean update;
+    JButton messageDialog;
+    JLabel timestampLabel;
 
-    public Bubble(String message, double maxWidth)
+    public Bubble(String message, LocalDate timestamp, int maxWidth)
     {
-        this.message = message;
-        lines = new ArrayList<>();
+        setLayout(new BorderLayout());
+        messageDialog = new JButton(message);
+        add(messageDialog, BorderLayout.CENTER);
+        update = true;
+        this.unformattedMessage = message;
         this.maxWidth = maxWidth;
-        this.update = true;
-
-        setBorder(new TitledBorder("Bubble"));
-        setPreferredSize(new Dimension(200, 200));
-
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy 'at' hh:mma z");
+//        this.timestampLabel = new JLabel(timestamp.format(dateTimeFormatter));
+        this.timestampLabel = new JLabel(timestamp.toString());
+//        add(timestampLabel, BorderLayout.SOUTH);
     }
 
     public void breakLine(Font f, FontRenderContext fontRenderContext)
     {
-        lines = new ArrayList<>();
-        String[] words = message.split("\\s+");
+        String[] words = unformattedMessage.split("\\s+");
 
         int i = 0;
         Rectangle2D bounds = new Rectangle2D.Double();
-        StringBuilder lineBuilder;
+        StringBuilder lineBuilder, formattedLineBuilder;
+        StringBuilder messageBuilder = new StringBuilder();
+        messageBuilder.append("<html>");
         double widestLine = 0;
-        double bubbleHeight = 0;
         boolean finished = false;
 
         while (!finished)
         {
-            double lineHeight;
-            Line line;
             lineBuilder = new StringBuilder();
+            formattedLineBuilder = new StringBuilder();
             int wordWidth = 0;
             do
             {
-                lineBuilder.append(words[i++]);
+                formattedLineBuilder.append(words[i]);
+                if (!words[i].contains("<"))
+                    lineBuilder.append(words[i]);
+                ++i;
                 lineBuilder.append(" ");
+                formattedLineBuilder.append(" ");
                 Rectangle2D proposedBounds = f.getStringBounds(lineBuilder.toString(), fontRenderContext);
+
                 if (wordWidth > 0)
                     wordWidth = (int)(proposedBounds.getWidth() - bounds.getWidth());
                 bounds = f.getStringBounds(lineBuilder.toString(), fontRenderContext);
 
-            } while (bounds.getWidth() < maxWidth && i < words.length);
+                if (i == words.length || bounds.getWidth() >= maxWidth)
+                    break;
 
-            lineHeight = bounds.getHeight();
-            bubbleHeight += lineHeight;
+            } while (true);
 
             if (i < words.length)
             {
@@ -65,7 +71,8 @@ public class Bubble extends JPanel
                 int lineCharCount = lineBuilder.length();
                 --i;
                 lineBuilder = lineBuilder.delete(lineCharCount - words[i].length(), lineCharCount - 1);
-                lineBuilder.append("\n");
+                lineBuilder.append("<br>");
+                formattedLineBuilder.append("<br>");
             }
             else
             {
@@ -73,64 +80,33 @@ public class Bubble extends JPanel
                     widestLine = bounds.getWidth();
                 finished = true;
             }
-            line = new Line(lineBuilder.toString(), bubbleHeight - lineHeight);
-            lines.add(line);
+            messageBuilder.append(formattedLineBuilder.toString());
         }
+        messageBuilder.append("</html>");
+        messageDialog.setText(messageBuilder.toString());
+    }
+
+    public JButton getMessageDialog()
+    {
+        return messageDialog;
+    }
+
+    public JLabel getTimestampLabel()
+    {
+        return timestampLabel;
     }
 
     @Override
     protected void paintComponent(Graphics g)
     {
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
         if (update)
         {
-            update = false;
+            Graphics2D g2 = (Graphics2D) getGraphics();
             Font f = g2.getFont();
             FontRenderContext fontRenderContext = g2.getFontRenderContext();
             breakLine(f, fontRenderContext);
+            update = false;
         }
-
-        int yPos = 20;
-        for (Line line : lines)
-        {
-            int lineHeight = (int) line.getHeight();
-            g2.drawString(line.getMessage(), 10, 10 + yPos);
-            System.out.println(yPos);
-            yPos += lineHeight;
-        }
-    }
-
-}
-
-class Line
-{
-    double height;
-    String message;
-
-    public Line(String message, double height)
-    {
-        this.height = height;
-        this.message = message;
-    }
-
-    public double getHeight()
-    {
-        return height;
-    }
-
-    public void setHeight(double height)
-    {
-        this.height = height;
-    }
-
-    public String getMessage()
-    {
-        return message;
-    }
-
-    public void setMessage(String message)
-    {
-        this.message = message;
     }
 }
