@@ -14,7 +14,6 @@ public class Bubble extends JPanel
     private String unformattedMessage;
     private boolean update;
     private JButton messageDialog;
-    private JLabel timestampLabel;
     private BubbleTimestamp bubbleTimestamp;
 
     public Bubble(String message, LocalDateTime timestamp, int maxWidth)
