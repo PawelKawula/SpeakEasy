@@ -12,12 +12,12 @@ public class FriendPanel extends JPanel
     JButton friendButton;
     Friend friend;
 
-    public FriendPanel(String nickname)
+    public FriendPanel(Friend friend)
     {
         setLayout(new BorderLayout());
-        friend = new Friend(nickname);
+        this.friend = friend;
         deleteButton = new JButton("X");
-        friendButton = new JButton(nickname);
+        friendButton = new JButton(friend.getNickname());
 
         add(friendButton, BorderLayout.CENTER);
         add(deleteButton, BorderLayout.EAST);
@@ -28,15 +28,13 @@ public class FriendPanel extends JPanel
        deleteButton.addActionListener(listener);
    }
 
-    public String getNickname()
-    {
-        return friend.getNickname();
-    }
+   public void addFriendButtonActionListener(ActionListener listener)
+   {
+       friendButton.addActionListener(listener);
+   }
 
-    public void setNickname(String nickname)
-    {
-        friend.setNickname(nickname);
-        friendButton.setText(nickname);
-    }
-
+   public Friend getFriend()
+   {
+       return friend;
+   }
 }

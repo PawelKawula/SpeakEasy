@@ -1,8 +1,12 @@
 package com.speakeasy;
 
 
+import com.speakeasy.logic.Friend;
+
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDateTime;
+import java.util.Locale;
 
 public class SpeakEasy
 {
@@ -60,7 +64,14 @@ class SpeakEasyFrame extends JFrame
 
         chatSubmit.addActionListener((event) ->
             {
-
+                String message = chatInput.getText();
+                if (message.substring(0,1).toLowerCase(Locale.ROOT).contains("o"))
+                {
+                    message = message.substring(1);
+                    chatBoxPanel.addFriendMessage(LocalDateTime.now(), message);
+                }
+                else
+                    chatBoxPanel.addMyMessage(LocalDateTime.now(), message);
             });
 
         friendsPanel = new JPanel();
@@ -87,28 +98,45 @@ class SpeakEasyFrame extends JFrame
 
         friendsSubmit = new JButton("Dodaj");
         friendsInputPanel.add(friendsSubmit, BorderLayout.EAST);
-        friendsSubmit.addActionListener((event) ->
-            {
-                FriendPanel friendPanel = new FriendPanel(friendsInput.getText());
-                friendPanel.addDeleteButtonActionListener((deleteButtonEvent) ->
-                    {
-                        friendsListPanel.remove(friendPanel);
-                        friendsListPanel.revalidate();
-                        friendsListPanel.repaint();
-                    });
-                friendPanel.setBorder(BorderFactory.createTitledBorder("friend"));
-                GridBagConstraints gbc = new GridBagConstraints();
-                gbc.gridy = friendsListPanel.getComponentCount();
-                gbc.anchor = GridBagConstraints.NORTH;
-                gbc.fill = GridBagConstraints.HORIZONTAL;
+        friendsSubmit.addActionListener((event) -> addFriend(new Friend(friendsInput.getText())));
+        pack();
+        Friend friend = new Friend("Pawel");
+        friend.addMyMessage(LocalDateTime.now(),"Hej co tam?");
+        friend.addFriendMessage(LocalDateTime.now(),"Spierdalaj cwelu");
+        addFriend(friend);
+        chatBoxPanel.setBubbles();
+    }
 
-                friendsListPanel.add(friendPanel, gbc);
+    public void addFriend(Friend friend)
+    {
+        FriendPanel friendPanel = new FriendPanel(friend);
+        friendPanel.addDeleteButtonActionListener((deleteButtonEvent) ->
+            {
+                if (friendPanel.getFriend() == chatBoxPanel.getCurrentFriend())
+                {
+                    chatBoxPanel.setCurrentFriend(null);
+                    chatBoxPanel.revalidate();
+                    chatBoxPanel.repaint();
+                }
+                friendsListPanel.remove(friendPanel);
                 friendsListPanel.revalidate();
                 friendsListPanel.repaint();
             });
+        friendPanel.addFriendButtonActionListener((friendButtonEvent) ->
+            {
+                chatBoxPanel.setCurrentFriend(friendPanel.getFriend());
+                chatBoxPanel.revalidate();
+                chatBoxPanel.repaint();
+            });
+        friendPanel.setBorder(BorderFactory.createTitledBorder("friend"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridy = friendsListPanel.getComponentCount() + 1;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        pack();
-        chatBoxPanel.setBubbles();
+        friendsListPanel.add(friendPanel, gbc);
+        friendsListPanel.revalidate();
+        friendsListPanel.repaint();
     }
 
     @Override

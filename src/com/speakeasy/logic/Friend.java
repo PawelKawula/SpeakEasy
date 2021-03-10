@@ -1,14 +1,15 @@
 package com.speakeasy.logic;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Friend
 {
     String nickname;
 
-    Map<LocalDate, String> myMessages;
-    Map<LocalDate, String> friendMessages;
+    Map<LocalDateTime, String> myMessages;
+    Map<LocalDateTime, String> friendMessages;
 
     public Friend(String nickname)
     {
@@ -27,23 +28,23 @@ public class Friend
         this.nickname = nickname;
     }
 
-    public Map<LocalDate, String> getMyMessages()
+    public Map<LocalDateTime, String> getMyMessages()
     {
         return myMessages;
     }
 
-    public Map<LocalDate, String> getFriendMessages()
+    public Map<LocalDateTime, String> getFriendMessages()
     {
         return friendMessages;
     }
 
-    public void addMyMessage(String message)
+    public void addMyMessage(LocalDateTime time ,String message)
     {
-        myMessages.put(LocalDate.now(), message);
+        myMessages.put(time, message);
     }
 
-    public void addFriendMessage(String message)
+    public void addFriendMessage(LocalDateTime time, String message)
     {
-        friendMessages.put(LocalDate.now(), message);
+        friendMessages.put(time, message);
     }
 }

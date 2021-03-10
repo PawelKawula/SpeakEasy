@@ -4,17 +4,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class Bubble extends JPanel
 {
-    int maxWidth;
-    String unformattedMessage;
-    boolean update;
-    JButton messageDialog;
-    JLabel timestampLabel;
+    private int maxWidth;
+    private String unformattedMessage;
+    private boolean update;
+    private JButton messageDialog;
+    private JLabel timestampLabel;
+    private BubbleTimestamp bubbleTimestamp;
 
-    public Bubble(String message, LocalDate timestamp, int maxWidth)
+    public Bubble(String message, LocalDateTime timestamp, int maxWidth)
     {
         setLayout(new BorderLayout());
         messageDialog = new JButton(message);
@@ -24,8 +27,9 @@ public class Bubble extends JPanel
         this.maxWidth = maxWidth;
 //        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy 'at' hh:mma z");
 //        this.timestampLabel = new JLabel(timestamp.format(dateTimeFormatter));
-        this.timestampLabel = new JLabel(timestamp.toString());
 //        add(timestampLabel, BorderLayout.SOUTH);
+        this.bubbleTimestamp = new BubbleTimestamp(timestamp);
+        add(this.bubbleTimestamp.getjLabel(), BorderLayout.SOUTH);
     }
 
     public void breakLine(Font f, FontRenderContext fontRenderContext)
@@ -91,11 +95,6 @@ public class Bubble extends JPanel
         return messageDialog;
     }
 
-    public JLabel getTimestampLabel()
-    {
-        return timestampLabel;
-    }
-
     @Override
     protected void paintComponent(Graphics g)
     {
@@ -108,5 +107,42 @@ public class Bubble extends JPanel
             breakLine(f, fontRenderContext);
             update = false;
         }
+    }
+
+    public void setColor(Color color)
+    {
+        messageDialog.setOpaque(false);
+        messageDialog.setContentAreaFilled(false);
+        messageDialog.setBorderPainted(false);
+        messageDialog.setBackground(color);
+        messageDialog.setForeground(Color.WHITE);
+    }
+
+    public BubbleTimestamp getBubbleTimestamp()
+    {
+        return bubbleTimestamp;
+    }
+}
+
+class BubbleTimestamp
+{
+    private JLabel jLabel;
+    private LocalDateTime time;
+
+    public BubbleTimestamp(LocalDateTime time)
+    {
+        this.time = time;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("YYYY-mm-dd E HH:mm:ss", Locale.forLanguageTag("pl"));
+        jLabel = new JLabel(time.format(dateTimeFormatter));
+    }
+
+    public JLabel getjLabel()
+    {
+        return jLabel;
+    }
+
+    public LocalDateTime getTime()
+    {
+        return time;
     }
 }
