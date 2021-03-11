@@ -4,7 +4,6 @@ import com.speakeasy.logic.Friend;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Iterator;
@@ -19,11 +18,6 @@ public class ChatBoxPanel extends JPanel
     {
         setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
-
-//        gbc.gridx = 3;
-//        gbc.ipadx = 10;
-//        addBubble("", gbc);
-//        revalidate();
     }
 
     public Bubble addBubble(String title,LocalDateTime time, String message, GridBagConstraints gbc, Color color)
@@ -46,8 +40,8 @@ public class ChatBoxPanel extends JPanel
         return bubble;
     }
 
-    public void setBubbles()
-    {
+//    public void setBubbles()
+//    {
 
 //        gbc.gridy = 0;
 //        gbc.gridx = 0;
@@ -64,7 +58,7 @@ public class ChatBoxPanel extends JPanel
 //        gbc.gridy = 1;
 //        gbc.anchor = GridBagConstraints.EAST;
 //        addBubble("A no czesc", gbc);
-    }
+//    }
 
     public void addMyMessage(LocalDateTime time, String message)
     {
@@ -167,22 +161,6 @@ public class ChatBoxPanel extends JPanel
     public Friend getCurrentFriend()
     {
         return currentFriend;
-    }
-
-    @Override
-    public void revalidate()
-    {
-        super.revalidate();
-        if (currentFriend != null)
-        {
-            Map<LocalDateTime, String> myMessages = currentFriend.getMyMessages();
-            Map<LocalDateTime, String> friendMessages = currentFriend.getFriendMessages();
-        }
-    }
-
-    public static void main(String[] args)
-    {
-
     }
 
 }

@@ -31,17 +31,22 @@ public class Bubble extends JPanel
         add(this.bubbleTimestamp.getjLabel(), BorderLayout.SOUTH);
     }
 
+    //ta funkcja to porazka
+    //placze evry tim
     public void breakLine(Font f, FontRenderContext fontRenderContext)
     {
         String[] words = unformattedMessage.split("\\s+");
 
         int i = 0;
-        Rectangle2D bounds = new Rectangle2D.Double();
+        Rectangle2D bounds;
         StringBuilder lineBuilder, formattedLineBuilder;
         StringBuilder messageBuilder = new StringBuilder();
         messageBuilder.append("<html>");
         double widestLine = 0;
         boolean finished = false;
+
+        if (unformattedMessage.contains("Lorem"))
+            System.out.println("");
 
         while (!finished)
         {
@@ -51,37 +56,89 @@ public class Bubble extends JPanel
             do
             {
                 formattedLineBuilder.append(words[i]);
-                if (!words[i].contains("<"))
-                    lineBuilder.append(words[i]);
+                if (words[i].contains("<"))
+                {
+                    while (!words[++i].contains("<"))
+                        formattedLineBuilder.append(words[i]);
+                    formattedLineBuilder.append(words[i]);
+                }
+                lineBuilder.append(words[i]);
                 ++i;
                 lineBuilder.append(" ");
                 formattedLineBuilder.append(" ");
-                Rectangle2D proposedBounds = f.getStringBounds(lineBuilder.toString(), fontRenderContext);
-
-                if (wordWidth > 0)
-                    wordWidth = (int)(proposedBounds.getWidth() - bounds.getWidth());
                 bounds = f.getStringBounds(lineBuilder.toString(), fontRenderContext);
 
-                if (i == words.length || bounds.getWidth() >= maxWidth)
-                    break;
+            } while (i != words.length && !(bounds.getWidth() >= maxWidth));
 
-            } while (true);
+            lineBuilder = new StringBuilder(lineBuilder.substring(0, lineBuilder.length() - 1));
 
-            if (i < words.length)
+            if (!lineBuilder.toString().contains(" "))
             {
-                if (bounds.getWidth() - wordWidth > widestLine)
-                    widestLine = bounds.getWidth() - wordWidth;
-                int lineCharCount = lineBuilder.length();
-                --i;
-                lineBuilder = lineBuilder.delete(lineCharCount - words[i].length(), lineCharCount - 1);
-                lineBuilder.append("<br>");
-                formattedLineBuilder.append("<br>");
+                int j = 0;
+                StringBuilder partBuilder = new StringBuilder();
+                StringBuilder formattedPartBuilder = new StringBuilder();
+                Rectangle2D partBounds;
+
+                do
+                {
+                    formattedLineBuilder.append(lineBuilder.charAt(j));
+                    char ch = lineBuilder.charAt(j);
+                    if (lineBuilder.charAt(j) == '<')
+                    {
+                        while (lineBuilder.charAt(++j) != '>' && j < lineBuilder.length())
+                        {
+                            ch = lineBuilder.charAt(j);
+                            formattedLineBuilder.append(ch);
+                        }
+
+                        if (j == lineBuilder.length())
+                           break;
+
+                        formattedLineBuilder.append(ch);
+                        ch = lineBuilder.charAt(++j);
+                    }
+                    partBuilder.append(ch);
+                    formattedPartBuilder.append(ch);
+                    partBounds = f.getStringBounds(partBuilder.toString(), fontRenderContext);
+
+                    ++j;
+                    if (partBounds.getWidth() >= maxWidth && j < lineBuilder.length())
+                    {
+                        formattedPartBuilder.append("<br>");
+                        messageBuilder.append(formattedPartBuilder);
+                        formattedPartBuilder = new StringBuilder();
+                        partBuilder = new StringBuilder();
+                    }
+                    else if (j == lineBuilder.length())
+                        break;
+
+                } while (true);
+                ++i;
+
+                if (i >= words.length)
+                    finished = true;
+                else
+                    formattedPartBuilder.append("<br>");
+                    formattedLineBuilder = formattedPartBuilder;
             }
             else
             {
-                if (bounds.getWidth() > widestLine)
-                    widestLine = bounds.getWidth();
-                finished = true;
+                if (i < words.length)
+                {
+                    if (bounds.getWidth() - wordWidth > widestLine)
+                        widestLine = bounds.getWidth() - wordWidth;
+                    int lineCharCount = lineBuilder.length();
+                    --i;
+                    lineBuilder.delete(lineCharCount - words[i].length(), lineCharCount - 1);
+                    lineBuilder.append("<br>");
+                    formattedLineBuilder.append("<br>");
+                }
+                else
+                {
+                    if (bounds.getWidth() > widestLine)
+                        widestLine = bounds.getWidth();
+                    finished = true;
+                }
             }
             messageBuilder.append(formattedLineBuilder.toString());
         }

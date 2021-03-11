@@ -1,0 +1,6 @@
+<!ELEMENT chat (author, message*)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT message (date, text)>
+<!ATTLIST message mine (yes,no)>
+<!ELEMENT text (#PCDATA)>
+<!ELEMENT date (#PCDATA)>

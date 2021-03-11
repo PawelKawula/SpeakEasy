@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE chat SYSTEM "chat.dtd">
+<chat>
+    <author>Mark</author>
+    <message>
+        <date>2021-03-10T22:10:45.951203215</date>
+        <text>No elo</text>
+    </message>
+    <message mine="yes">
+        <date>2021-03-10T22:10:38.841400053</date>
+        <text>Czesc</text>
+    </message>
+</chat>
