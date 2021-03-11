@@ -1,1 +1,2 @@
-line breaks for long words in bubbles
+line breaks for long words in bubbles || done
+lineBreak refactor with including '\n' and replacing it with <br>

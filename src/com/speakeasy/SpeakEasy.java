@@ -73,17 +73,13 @@ class SpeakEasyFrame extends JFrame
                 int result = jFileChooser.showSaveDialog(this);
                 Friend currentFriend = chatBoxPanel.getCurrentFriend();
                 File file = jFileChooser.getSelectedFile();
-                if (result == JFileChooser.APPROVE_OPTION && currentFriend != null)
+                if (result == JFileChooser.APPROVE_OPTION)
                 {
                     try
                     {
                         XMLChatReadWrite.writeChat(currentFriend, file);
                     }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    catch (XMLStreamException e)
+                    catch (XMLStreamException | IOException e)
                     {
                         e.printStackTrace();
                     }
@@ -126,13 +122,16 @@ class SpeakEasyFrame extends JFrame
         chatPanel.add(chatInputPanel, BorderLayout.SOUTH);
         chatInputPanel.setLayout(new BorderLayout());
         chatInput = new JTextArea(5, 30);
-        chatInputPanel.add(chatInput, BorderLayout.CENTER);
+        chatInput.setLineWrap(true);
+        chatInputPanel.add(new JScrollPane(chatInput), BorderLayout.CENTER);
         chatSubmit = new JButton("Wyślij");
         chatInputPanel.add(chatSubmit, BorderLayout.EAST);
 
         chatSubmit.addActionListener((event) ->
             {
                 String message = chatInput.getText();
+                if (message.trim().equals(""))
+                    return;
                 if (message.substring(0,1).toLowerCase(Locale.ROOT).contains("o"))
                 {
                     message = message.substring(1);
@@ -172,7 +171,7 @@ class SpeakEasyFrame extends JFrame
         for (int i = 0; i < 100; ++i)
         {
             friend.addMyMessage(LocalDateTime.now(),"Hej co tam?");
-            friend.addFriendMessage(LocalDateTime.now(),"Spierdalaj cwelu");
+            friend.addFriendMessage(LocalDateTime.now(),"Nic takiego");
         }
         addFriend(friend);
     }

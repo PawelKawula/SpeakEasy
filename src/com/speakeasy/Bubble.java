@@ -28,116 +28,89 @@ public class Bubble extends JPanel
         add(this.bubbleTimestamp.getjLabel(), BorderLayout.SOUTH);
     }
 
-    //ta funkcja to porazka
-    //placze evry tim
     public void breakLine(Font f, FontRenderContext fontRenderContext)
     {
         String[] words = unformattedMessage.split("\\s+");
 
         int i = 0;
-        Rectangle2D bounds;
-        StringBuilder lineBuilder, formattedLineBuilder;
         StringBuilder messageBuilder = new StringBuilder();
-        messageBuilder.append("<html>");
-        double widestLine = 0;
-        boolean finished = false;
+        StringBuilder lineBuilder;
+        StringBuilder formattedLineBuilder;
 
-        while (!finished)
+        int maxWidthCharCount = 0;
+        Rectangle2D bounds;
+
+        do
+        {
+            maxWidthCharCount += 4;
+            messageBuilder.append("MMMM");
+            bounds = f.getStringBounds(messageBuilder.toString(), fontRenderContext);
+        } while (bounds.getWidth() < maxWidth);
+
+        messageBuilder = new StringBuilder("<html>");
+
+        do
         {
             lineBuilder = new StringBuilder();
             formattedLineBuilder = new StringBuilder();
-            int wordWidth = 0;
-            do
-            {
-                formattedLineBuilder.append(words[i]);
-                if (words[i].contains("<"))
-                {
-                    while (!words[++i].contains("<"))
-                        formattedLineBuilder.append(words[i]);
-                    formattedLineBuilder.append(words[i]);
-                }
-                lineBuilder.append(words[i]);
-                ++i;
-                lineBuilder.append(" ");
-                formattedLineBuilder.append(" ");
-                bounds = f.getStringBounds(lineBuilder.toString(), fontRenderContext);
+            String word = words[i];
+            int wordLength = word.length();
 
-            } while (i != words.length && !(bounds.getWidth() >= maxWidth));
-
-            lineBuilder = new StringBuilder(lineBuilder.substring(0, lineBuilder.length() - 1));
-
-            if (!lineBuilder.toString().contains(" "))
+            if (words[i].length() >= maxWidthCharCount)
             {
                 int j = 0;
-                StringBuilder partBuilder = new StringBuilder();
                 StringBuilder formattedPartBuilder = new StringBuilder();
-                Rectangle2D partBounds;
 
                 do
                 {
-                    formattedLineBuilder.append(lineBuilder.charAt(j));
-                    char ch = lineBuilder.charAt(j);
-                    if (lineBuilder.charAt(j) == '<')
+                    int end = Math.min(j + maxWidthCharCount, wordLength);
+                    String part = word.substring(j, end);
+                    if (end < wordLength)
                     {
-                        while (lineBuilder.charAt(++j) != '>' && j < lineBuilder.length())
-                        {
-                            ch = lineBuilder.charAt(j);
-                            formattedLineBuilder.append(ch);
-                        }
-
-                        if (j == lineBuilder.length())
-                           break;
-
-                        formattedLineBuilder.append(ch);
-                        ch = lineBuilder.charAt(++j);
+                        formattedPartBuilder.append(part + "<br>");
+                        j = end;
                     }
-                    partBuilder.append(ch);
-                    formattedPartBuilder.append(ch);
-                    partBounds = f.getStringBounds(partBuilder.toString(), fontRenderContext);
-
-                    ++j;
-                    if (partBounds.getWidth() >= maxWidth && j < lineBuilder.length())
+                    else
                     {
-                        formattedPartBuilder.append("<br>");
-                        messageBuilder.append(formattedPartBuilder);
-                        formattedPartBuilder = new StringBuilder();
-                        partBuilder = new StringBuilder();
+                        lineBuilder.append(part + " ");
+                        formattedLineBuilder.append(part + " ");
+                        j = end;
                     }
-                    else if (j == lineBuilder.length())
-                        break;
+                } while (j < wordLength);
 
-                } while (true);
+                messageBuilder.append(formattedPartBuilder.toString());
                 ++i;
-
-                if (i >= words.length)
-                    finished = true;
-                else
-                    formattedPartBuilder.append("<br>");
-                    formattedLineBuilder = formattedPartBuilder;
             }
             else
             {
-                if (i < words.length)
+                if (++i >= words.length)
                 {
-                    if (bounds.getWidth() - wordWidth > widestLine)
-                        widestLine = bounds.getWidth() - wordWidth;
-                    int lineCharCount = lineBuilder.length();
-                    --i;
-                    lineBuilder.delete(lineCharCount - words[i].length(), lineCharCount - 1);
-                    lineBuilder.append("<br>");
-                    formattedLineBuilder.append("<br>");
+                    messageBuilder.append(word);
+                    break;
                 }
-                else
-                {
-                    if (bounds.getWidth() > widestLine)
-                        widestLine = bounds.getWidth();
-                    finished = true;
-                }
+                lineBuilder.append(word);
+                formattedLineBuilder.append(word);
+                word = words[i];
+                wordLength = word.length();
             }
+
+            int lineLength = lineBuilder.length();
+
+            while (lineLength + wordLength < maxWidthCharCount && i < words.length)
+            {
+                lineBuilder.append(" " + words[i].replaceAll("<.*?>", ""));
+                formattedLineBuilder.append(" " + words[i++]);
+                lineLength = lineBuilder.length();
+                if (i < words.length)
+                    wordLength = words[i].length();
+            }
+
+            formattedLineBuilder.append("<br>");
             messageBuilder.append(formattedLineBuilder.toString());
-        }
-        messageBuilder.append("</html>");
-        messageDialog.setText(messageBuilder.toString());
+
+        } while (i < words.length);
+
+        messageDialog.setText(messageBuilder.toString() + "</html>");
     }
 
     public JButton getMessageDialog()
@@ -182,9 +155,8 @@ class BubbleTimestamp
     public BubbleTimestamp(LocalDateTime time)
     {
         this.time = time;
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("YYYY-mm-dd E HH:mm:ss", Locale.forLanguageTag("pl"));
-//        jLabel = new JLabel(time.format(dateTimeFormatter));
-        jLabel = new JLabel(time.format(DateTimeFormatter.ISO_DATE_TIME));
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd E HH:mm:ss", Locale.forLanguageTag("pl"));
+        jLabel = new JLabel(time.format(dateTimeFormatter));
     }
 
     public JLabel getjLabel()
