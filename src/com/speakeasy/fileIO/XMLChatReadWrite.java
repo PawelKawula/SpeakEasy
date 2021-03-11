@@ -1,18 +1,14 @@
 package com.speakeasy.fileIO;
 
-import com.speakeasy.ChatBoxPanel;
 import com.speakeasy.logic.Friend;
 
-import javax.swing.*;
 import javax.xml.stream.*;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.Map;
 
 public class XMLChatReadWrite
@@ -23,6 +19,7 @@ public class XMLChatReadWrite
         XMLStreamReader parser = XMLInputFactory.newFactory().createXMLStreamReader(inputStream);
         boolean foundAuthor = false;
         Friend friend = null;
+
         while (parser.hasNext() && !foundAuthor)
         {
             int event = parser.next();
@@ -37,6 +34,7 @@ public class XMLChatReadWrite
                     return null;
             }
         }
+
         while (parser.hasNext())
         {
             int event = parser.next();
@@ -47,15 +45,16 @@ public class XMLChatReadWrite
                     String mineValue = parser.getAttributeValue(null, "mine");
                     if (mineValue == null)
                         mineValue = "no";
-                    boolean mine = mineValue.toLowerCase(Locale.ROOT).equals("yes") ? true : false;
+                    boolean mine = mineValue.equalsIgnoreCase("yes");
 
                     String messageText = null;
                     LocalDateTime timestamp = null;
                     int found = 0;
+
                     while (parser.hasNext() && found < 2)
                     {
-
                         event = parser.next();
+
                         if (event == XMLStreamConstants.START_ELEMENT)
                         {
                             if (parser.getLocalName().equals("date"))
@@ -70,6 +69,7 @@ public class XMLChatReadWrite
                             }
                         }
                     }
+
                     if (mine)
                         friend.addMyMessage(timestamp, messageText);
                     else
@@ -133,28 +133,4 @@ public class XMLChatReadWrite
         writer.writeEndDocument();
         return true;
     }
-
-    public static void main(String[] args) throws IOException, XMLStreamException
-    {
-        try
-        {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-//        Friend friend = readChat(new File("src/com/speakeasy/fileIO/samplechat.xml"));
-        Friend friend = readChat(new File("export.xml"));
-        JFrame frame = new JFrame("import");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ChatBoxPanel chatBoxPanel = new ChatBoxPanel();
-        chatBoxPanel.setPreferredSize(new Dimension(600, 400));
-        chatBoxPanel.setCurrentFriend(friend);
-        frame.add(new JScrollPane(chatBoxPanel));
-        frame.setVisible(true);
-        frame.pack();
-        chatBoxPanel.setCurrentFriend(friend);
-    }
-
 }

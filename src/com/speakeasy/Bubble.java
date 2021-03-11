@@ -24,9 +24,6 @@ public class Bubble extends JPanel
         update = true;
         this.unformattedMessage = message;
         this.maxWidth = maxWidth;
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy 'at' hh:mma z");
-//        this.timestampLabel = new JLabel(timestamp.format(dateTimeFormatter));
-//        add(timestampLabel, BorderLayout.SOUTH);
         this.bubbleTimestamp = new BubbleTimestamp(timestamp);
         add(this.bubbleTimestamp.getjLabel(), BorderLayout.SOUTH);
     }
@@ -44,9 +41,6 @@ public class Bubble extends JPanel
         messageBuilder.append("<html>");
         double widestLine = 0;
         boolean finished = false;
-
-        if (unformattedMessage.contains("Lorem"))
-            System.out.println("");
 
         while (!finished)
         {
@@ -189,7 +183,8 @@ class BubbleTimestamp
     {
         this.time = time;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("YYYY-mm-dd E HH:mm:ss", Locale.forLanguageTag("pl"));
-        jLabel = new JLabel(time.format(dateTimeFormatter));
+//        jLabel = new JLabel(time.format(dateTimeFormatter));
+        jLabel = new JLabel(time.format(DateTimeFormatter.ISO_DATE_TIME));
     }
 
     public JLabel getjLabel()

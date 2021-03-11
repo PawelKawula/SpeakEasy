@@ -94,21 +94,23 @@ class SpeakEasyFrame extends JFrame
         importItem.addActionListener((evnet) ->
             {
                 int result = jFileChooser.showOpenDialog(this);
-                File file = jFileChooser.getSelectedFile();
-                try
+                if (result == JFileChooser.APPROVE_OPTION)
                 {
-                    Friend friend = XMLChatReadWrite.readChat(file);
-                    createChatBoxFrame(friend);
+                    File file = jFileChooser.getSelectedFile();
+                    try
+                    {
+                        Friend friend = XMLChatReadWrite.readChat(file);
+                        createChatBoxFrame(friend);
+                    }
+                    catch (IOException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    catch (XMLStreamException e)
+                    {
+                        e.printStackTrace();
+                    }
                 }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-                catch (XMLStreamException e)
-                {
-                    e.printStackTrace();
-                }
-
             });
         jMenu.add(importItem);
 
@@ -167,10 +169,12 @@ class SpeakEasyFrame extends JFrame
         friendsSubmit.addActionListener((event) -> addFriend(new Friend(friendsInput.getText())));
         pack();
         Friend friend = new Friend("Pawel");
-        friend.addMyMessage(LocalDateTime.now(),"Hej co tam?");
-        friend.addFriendMessage(LocalDateTime.now(),"Spierdalaj cwelu");
+        for (int i = 0; i < 100; ++i)
+        {
+            friend.addMyMessage(LocalDateTime.now(),"Hej co tam?");
+            friend.addFriendMessage(LocalDateTime.now(),"Spierdalaj cwelu");
+        }
         addFriend(friend);
-//        chatBoxPanel.setBubbles();
     }
 
     public void addFriend(Friend friend)
