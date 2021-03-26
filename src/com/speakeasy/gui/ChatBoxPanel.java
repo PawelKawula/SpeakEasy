@@ -5,22 +5,24 @@ import com.speakeasy.logic.Friend;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
-import java.util.AbstractMap;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
 
 public class ChatBoxPanel extends JPanel
 {
+    public static int ICON_A = 38;
+
     private Friend currentFriend;
     private final GridBagConstraints gbc;
     private JPanel chatPanel;
     private JPanel nicknamePanel;
     private JLabel friendLabel;
+    private JLabel friendIcon;
     private JLabel emptyLabel;
+    private JScrollPane chatScrollPane;
 
     public ChatBoxPanel()
     {
-        setBorder(null);
         setLayout(new BorderLayout());
 
         emptyLabel = new JLabel(new ImageIcon("emptyIcon.png"));
@@ -29,18 +31,25 @@ public class ChatBoxPanel extends JPanel
         chatPanel.setBackground(SpeakEasyFrame.purple);
         chatPanel.setLayout(new BorderLayout());
         chatPanel.add(emptyLabel, BorderLayout.CENTER);
-        chatPanel.setBorder(null);
-        JScrollPane chatScrollPane = new JScrollPane(chatPanel);
+        chatPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+        chatScrollPane = new JScrollPane(chatPanel);
         chatScrollPane.setBorder(null);
         add(chatScrollPane, BorderLayout.CENTER);
         gbc = new GridBagConstraints();
 
         nicknamePanel = new JPanel();
+        nicknamePanel.setLayout(new BorderLayout());
         nicknamePanel.setBackground(SpeakEasyFrame.purple);
-        nicknamePanel.setBorder(BorderFactory.createEtchedBorder());
+        nicknamePanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 0));
+
         friendLabel = new JLabel("No friend Selected");
+        friendLabel.setHorizontalAlignment(SwingConstants.CENTER);
         friendLabel.setFont(new Font("Lato", Font.PLAIN, 23));
-        nicknamePanel.add(friendLabel);
+        friendLabel.setBorder(null);
+        nicknamePanel.add(friendLabel, BorderLayout.CENTER);
+
+        friendIcon = new JLabel("");
+
         add(nicknamePanel, BorderLayout.NORTH);
     }
 
@@ -70,6 +79,8 @@ public class ChatBoxPanel extends JPanel
         currentFriend.addMyMessage(time, message);
         Bubble bubble = makeBubble(time, message);
         bubble.getBubbleTimestamp().getjLabel().setHorizontalAlignment(JLabel.RIGHT);
+        bubble.getMessageDialog().setOpaque(true);
+        bubble.getMessageDialog().setContentAreaFilled(true);
         gbc.anchor = GridBagConstraints.EAST;
         gbc.gridx = 2;
         ++gbc.gridy;
@@ -97,7 +108,14 @@ public class ChatBoxPanel extends JPanel
             friendLabel.setText(currentFriend.getNickname());
             friendLabel.revalidate();
             chatPanel.removeAll();
+            nicknamePanel.remove(friendIcon);
             this.currentFriend = currentFriend;
+            ImageIcon avatar = new ImageIcon(currentFriend.getAvatar().getImage().
+                    getScaledInstance(ICON_A, ICON_A, Image.SCALE_SMOOTH));
+            friendIcon = new AvatarLabel(
+                    avatar, ICON_A);
+            friendIcon.setBorder(null);
+            nicknamePanel.add(friendIcon, BorderLayout.WEST);
 
             if (currentFriend.getFriendMessages().isEmpty() && currentFriend.getMyMessages().isEmpty())
             {
@@ -110,17 +128,10 @@ public class ChatBoxPanel extends JPanel
 
             gbc.insets = new Insets(10, 10, 10, 10);
 
-            Map<LocalDateTime, String> myMessages = currentFriend.getMyMessages();
-            Map<LocalDateTime, String> friendMessages = currentFriend.getFriendMessages();
-            Map<LocalDateTime, Map.Entry<Boolean, String>> combinedMessages = new TreeMap<>();
+            Set<Map.Entry<LocalDateTime, Map.Entry<Boolean, String>>> combinedMessages =
+                    currentFriend.getCombinedMessages().entrySet();
 
-            myMessages.forEach((key, value) ->
-                    combinedMessages.put(key, new AbstractMap.SimpleEntry<>(true, value)));
-
-            friendMessages.forEach((key, value) ->
-                    combinedMessages.put(key, new AbstractMap.SimpleEntry<>(false, value)));
-
-            for (Map.Entry<LocalDateTime, Map.Entry<Boolean, String>> entry : combinedMessages.entrySet())
+            for (Map.Entry<LocalDateTime, Map.Entry<Boolean, String>> entry : combinedMessages)
             {
                 LocalDateTime key = entry.getKey();
                 Map.Entry<Boolean, String> value = entry.getValue();
@@ -147,6 +158,7 @@ public class ChatBoxPanel extends JPanel
         else if (currentFriend == null)
         {
             this.currentFriend = null;
+            nicknamePanel.remove(friendIcon);
             chatPanel.setLayout(new BorderLayout());
             chatPanel.removeAll();
             chatPanel.add(emptyLabel, BorderLayout.CENTER);

@@ -1,7 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE chat SYSTEM "chat.dtd">
 <chat>
-	<author>Pawel</author>
+	<author>
+		<name>Adam</name>
+		<avatar>manface.jpg</avatar>
+	</author>
 	<message mine="no">
 		<date>2021-03-11T19:59:43.595683327</date>
 		<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et magna dignissim, semper odio vel, hendrerit dui. Suspendisse semper fringilla. </text>

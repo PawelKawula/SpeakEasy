@@ -12,15 +12,21 @@ public class ChatInputPanel extends JPanel
    {
       chatBoxPanel = cBP;
       setLayout(new BorderLayout());
-      setBorder(BorderFactory.createRaisedSoftBevelBorder());
+//      setBorder(BorderFactory.createCompoundBorder(
+//              BorderFactory.createRaisedSoftBevelBorder(),
+//              BorderFactory.createEmptyBorder(6, 4, 4, 4)));
+       setBorder(BorderFactory.createEmptyBorder(5, 2, 5, 5));
 
       JTextField chatInput = new JTextField(60);
       add(chatInput, BorderLayout.CENTER);
 
-      JButton chatSubmit = new JButton("Send");
+      ImageIcon sendIcon= new ImageIcon("send.png");
+      sendIcon.setImage(sendIcon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+      JButton chatSubmit = new JButton(sendIcon);
       chatSubmit.setVerticalAlignment(SwingConstants.CENTER);
-      chatSubmit.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(-3,15,-3,15), chatSubmit.getBorder()));
       chatSubmit.setBorderPainted(false);
+      chatSubmit.setBorder(BorderFactory.createCompoundBorder(
+              BorderFactory.createEmptyBorder(-3,15,-3,15), chatSubmit.getBorder()));
 
       chatSubmit.addActionListener((event) ->
       {

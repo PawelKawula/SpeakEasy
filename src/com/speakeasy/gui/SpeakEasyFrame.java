@@ -4,16 +4,13 @@ import com.speakeasy.logic.Friend;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 public class SpeakEasyFrame extends JFrame
 {
     private ChatBoxPanel chatBoxPanel;
     private FriendsPanel friendsPanel;
 
-//    static final Color jMenuColor = new Color(45, 49, 66);
-    static final Color purple = new Color(45,49,66);
+    static final Color purple = new Color(37, 43, 50);
 
     public SpeakEasyFrame()
     {
@@ -24,13 +21,13 @@ public class SpeakEasyFrame extends JFrame
 
         JPanel chatPanel = new JPanel();
         chatPanel.setLayout(new BorderLayout());
+//        chatPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         chatPanel.add(chatBoxPanel, BorderLayout.CENTER);
 
         ChatInputPanel chatInputPanel = new ChatInputPanel(chatBoxPanel);
         chatInputPanel.setOpaque(false);
         chatPanel.add(chatInputPanel, BorderLayout.SOUTH);
 
-        chatPanel.setBorder(null);
         add(chatPanel, BorderLayout.CENTER);
 
         friendsPanel = new FriendsPanel(chatBoxPanel);

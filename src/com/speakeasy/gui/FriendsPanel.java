@@ -11,7 +11,6 @@ public class FriendsPanel extends JPanel
 {
     private ChatBoxPanel chatBoxPanel;
     private JPanel friendsListPanel;
-    private JComboBox<String> jComboBox;
     private FriendLabel choosenLabel;
     GridBagConstraints gbc;
 
@@ -20,21 +19,10 @@ public class FriendsPanel extends JPanel
         chatBoxPanel = cBP;
 
         setLayout(new BorderLayout());
+//        setBorder(BorderFactory.createLoweredBevelBorder());
+        setBorder(null);
         gbc = new GridBagConstraints();
         gbc.gridy = 1;
-
-        JPanel jComboPanel = new JPanel();
-        jComboPanel.setLayout(new BorderLayout());
-
-        jComboBox = new JComboBox<>();
-        jComboBox.addItem("Friends");
-        jComboBox.addItem("Groups");
-        jComboBox.setBorder(BorderFactory.createEtchedBorder());
-        jComboBox.setFont(new Font("Lato", Font.PLAIN, 23));
-        jComboPanel.add(jComboBox, BorderLayout.CENTER);
-
-        jComboPanel.setBorder(jComboBox.getBorder());
-        add(jComboPanel, BorderLayout.NORTH);
 
         friendsListPanel = new JPanel();
         friendsListPanel.setBackground(SpeakEasyFrame.purple);
@@ -51,21 +39,27 @@ public class FriendsPanel extends JPanel
         add(friendsListScrollPane, BorderLayout.CENTER);
 
         JPanel friendsInputPanel = new JPanel();
-        friendsInputPanel.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+//        friendsInputPanel.setBorder(BorderFactory.createCompoundBorder(
+//                BorderFactory.createRaisedSoftBevelBorder(),
+//                BorderFactory.createEmptyBorder(2, 4, 4, 4)));
+//        friendsInputPanel.setBorder(BorderFactory.createRaisedSoftBevelBorder());
         friendsInputPanel.setLayout(new BorderLayout());
         add(friendsInputPanel, BorderLayout.SOUTH);
 
         JTextField friendsInput = new JTextField(12);
         friendsInputPanel.add(friendsInput, BorderLayout.CENTER);
 
-        JButton friendsSubmit = new JButton("Add");
+        ImageIcon addIcon = new ImageIcon("plus.png");
+        addIcon.setImage(addIcon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+        JButton friendsSubmit = new JButton(addIcon);
+        friendsSubmit.setVerticalAlignment(SwingConstants.CENTER);
         friendsSubmit.setBorderPainted(false);
-        friendsSubmit.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(-3,15,-3,15), friendsSubmit.getBorder()));
+        friendsSubmit.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(-3,15,-3,15), friendsSubmit.getBorder()));
         friendsInputPanel.add(friendsSubmit, BorderLayout.EAST);
         friendsSubmit.addActionListener((event) ->
             {
-
-                if (!friendsInput.getText().trim().equals("")) addFriend(new Friend(friendsInput.getText()));
+                if (!friendsInput.getText().trim().equals("")) addFriend(new Friend(friendsInput.getText(), null));
             });
         choosenLabel = null;
     }

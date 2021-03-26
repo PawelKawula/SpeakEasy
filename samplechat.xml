@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE chat SYSTEM "chat.dtd">
 <chat>
-    <author>Mark</author>
+    <author>
+        <name>Monika</name>
+        <avatar>womanface.jpg</avatar>
+    </author>
     <message>
         <date>2021-03-10T22:10:45.951203215</date>
         <text>No elo</text>
