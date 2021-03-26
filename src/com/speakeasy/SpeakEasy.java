@@ -2,230 +2,59 @@ package com.speakeasy;
 
 
 import com.speakeasy.fileIO.XMLChatReadWrite;
+import com.speakeasy.gui.SpeakEasyFrame;
 import com.speakeasy.logic.Friend;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.stream.XMLStreamException;
 import java.awt.*;
 import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Locale;
 
 public class SpeakEasy
 {
     public static void main(String[] args)
     {
-        try
+        EventQueue.invokeLater(() ->
         {
+            try
+            {
+//            UIManager.put( "control", new Color( 128, 128, 128) );
+//            UIManager.put( "info", new Color(128/3,128/3,128/3) );
+//            UIManager.put( "nimbusBase", new Color( 18/3, 30/3, 49/3) );
+//            UIManager.put( "nimbusAlertYellow", new Color( 248, 187, 0) );
+//            UIManager.put( "nimbusDisabledText", new Color( 128, 128, 128) );
+//            UIManager.put( "nimbusFocus", new Color(115/3,164/3,209/3) );
+//            UIManager.put( "nimbusGreen", new Color(176,179,50) );
+//            UIManager.put( "nimbusInfoBlue", new Color( 66, 139, 221) );
+//            UIManager.put( "nimbusLightBackground", new Color( 18, 30, 49) );
+//            UIManager.put( "nimbusOrange", new Color(191,98,4) );
+//            UIManager.put( "nimbusRed", new Color(169,46,34) );
+//            UIManager.put( "nimbusSelectedText", new Color( 255, 255, 255) );
+//            UIManager.put( "nimbusSelectionBackground", new Color( 104, 93, 156) );
+//            UIManager.put( "text", new Color( 230, 230, 230) );
+//            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        JFrame frame = new SpeakEasyFrame();
-        frame.setTitle("SpeakEasy");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+//            UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
+
+//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+//            UIManager.setLookAndFeel("com.jtattoo.plaf.noire.NoireLookAndFeel");
+//            UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
+
+            SpeakEasyFrame frame = new SpeakEasyFrame();
+            frame.setTitle("SpeakEasy");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setVisible(true);
+            Friend sampleFriend = XMLChatReadWrite.readChat(new File("export.xml"));
+            frame.getChatBoxPanel().setCurrentFriend(sampleFriend);
+            frame.getFriendsPanel().addFriend(sampleFriend);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        });
     }
 }
 
-class SpeakEasyFrame extends JFrame
-{
-    JPanel chatPanel;
-    ChatBoxPanel chatBoxPanel;
-    JPanel chatInputPanel;
-    JPanel friendsPanel;
-    JPanel friendsListPanel;
-    JPanel friendsInputPanel;
-    JMenuBar jMenuBar;
-    JMenu jMenu;
-    JMenuItem exportItem;
-    JMenuItem importItem;
-    JFileChooser jFileChooser;
-
-    JTextArea chatInput;
-    JButton chatSubmit;
-
-    JTextArea friendsInput;
-    JButton friendsSubmit;
-
-    public SpeakEasyFrame()
-    {
-        setLayout(new BorderLayout());
-
-        jMenuBar = new JMenuBar();
-        setJMenuBar(jMenuBar);
-
-        jMenu = new JMenu("File");
-        jMenuBar.add(jMenu);
-
-        jFileChooser = new JFileChooser();
-        jFileChooser.setCurrentDirectory(new File("."));
-        jFileChooser.setFileFilter(new FileNameExtensionFilter("XML files", "xml"));
-
-        exportItem = new JMenuItem("Export Chat");
-        exportItem.setEnabled(false);
-        exportItem.addActionListener((event) ->
-            {
-                int result = jFileChooser.showSaveDialog(this);
-                Friend currentFriend = chatBoxPanel.getCurrentFriend();
-                File file = jFileChooser.getSelectedFile();
-                if (result == JFileChooser.APPROVE_OPTION)
-                {
-                    try
-                    {
-                        XMLChatReadWrite.writeChat(currentFriend, file);
-                    }
-                    catch (XMLStreamException | IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        jMenu.add(exportItem);
-        importItem = new JMenuItem("Import Chat");
-        importItem.addActionListener((evnet) ->
-            {
-                int result = jFileChooser.showOpenDialog(this);
-                if (result == JFileChooser.APPROVE_OPTION)
-                {
-                    File file = jFileChooser.getSelectedFile();
-                    try
-                    {
-                        Friend friend = XMLChatReadWrite.readChat(file);
-                        createChatBoxFrame(friend);
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    catch (XMLStreamException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        jMenu.add(importItem);
-
-        chatPanel = new JPanel();
-        add(chatPanel, BorderLayout.CENTER);
-        chatPanel.setLayout(new BorderLayout());
-        chatPanel.setBorder(BorderFactory.createTitledBorder("chatPanel"));
-
-        chatBoxPanel = new ChatBoxPanel();
-        chatPanel.add(new JScrollPane(chatBoxPanel), BorderLayout.CENTER);
-
-        chatInputPanel = new JPanel();
-        chatPanel.add(chatInputPanel, BorderLayout.SOUTH);
-        chatInputPanel.setLayout(new BorderLayout());
-        chatInput = new JTextArea(5, 30);
-        chatInput.setLineWrap(true);
-        chatInputPanel.add(new JScrollPane(chatInput), BorderLayout.CENTER);
-        chatSubmit = new JButton("Wyślij");
-        chatInputPanel.add(chatSubmit, BorderLayout.EAST);
-
-        chatSubmit.addActionListener((event) ->
-            {
-                String message = chatInput.getText();
-                if (message.trim().equals(""))
-                    return;
-                if (message.substring(0,1).toLowerCase(Locale.ROOT).contains("o"))
-                {
-                    message = message.substring(1);
-                    chatBoxPanel.addFriendMessage(LocalDateTime.now(), message);
-                }
-                else
-                    chatBoxPanel.addMyMessage(LocalDateTime.now(), message);
-            });
-
-        friendsPanel = new JPanel();
-        add(friendsPanel, BorderLayout.WEST);
-        friendsPanel.setLayout(new BorderLayout());
-        friendsPanel.setBorder(BorderFactory.createTitledBorder("friendsPanel"));
-
-        friendsListPanel = new JPanel();
-        JScrollPane friendsListScrollPane = new JScrollPane(friendsListPanel);
-        friendsPanel.add(friendsListScrollPane, BorderLayout.CENTER);
-        friendsListPanel.setLayout(new GridBagLayout());
-        friendsListPanel.setBorder(BorderFactory.createTitledBorder("friendsListPanel"));
-        GridBagConstraints labelGBC = new GridBagConstraints();
-        labelGBC.weighty = 1;
-        labelGBC.weightx = 0.01;
-        friendsListPanel.add(new JLabel(""), labelGBC);
-
-        friendsInputPanel = new JPanel();
-        friendsPanel.add(friendsInputPanel, BorderLayout.SOUTH);
-        friendsInputPanel.setLayout(new BorderLayout());
-
-        friendsInput = new JTextArea(1, 20);
-        friendsInputPanel.add(friendsInput, BorderLayout.CENTER);
-
-        friendsSubmit = new JButton("Dodaj");
-        friendsInputPanel.add(friendsSubmit, BorderLayout.EAST);
-        friendsSubmit.addActionListener((event) -> addFriend(new Friend(friendsInput.getText())));
-        pack();
-        Friend friend = new Friend("Pawel");
-        for (int i = 0; i < 100; ++i)
-        {
-            friend.addMyMessage(LocalDateTime.now(),"Hej co tam?");
-            friend.addFriendMessage(LocalDateTime.now(),"Nic takiego");
-        }
-        addFriend(friend);
-    }
-
-    public void addFriend(Friend friend)
-    {
-        FriendPanel friendPanel = new FriendPanel(friend);
-        friendPanel.addDeleteButtonActionListener((deleteButtonEvent) ->
-            {
-                if (friendPanel.getFriend() == chatBoxPanel.getCurrentFriend())
-                {
-                    chatBoxPanel.setCurrentFriend(null);
-                    exportItem.setEnabled(false);
-                    revalidate();
-                    repaint();
-                }
-                friendsListPanel.remove(friendPanel);
-                friendsListPanel.revalidate();
-                friendsListPanel.repaint();
-            });
-        friendPanel.addFriendButtonActionListener((friendButtonEvent) ->
-            {
-                chatBoxPanel.setCurrentFriend(friendPanel.getFriend());
-                exportItem.setEnabled(true);
-                chatBoxPanel.revalidate();
-                chatBoxPanel.repaint();
-            });
-        friendPanel.setBorder(BorderFactory.createTitledBorder("friend"));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridy = friendsListPanel.getComponentCount() + 1;
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        friendsListPanel.add(friendPanel, gbc);
-        friendsListPanel.revalidate();
-        friendsListPanel.repaint();
-    }
-
-    public static void createChatBoxFrame(Friend friend)
-    {
-        JFrame frame = new JFrame("import");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ChatBoxPanel chatBoxPanel = new ChatBoxPanel();
-        chatBoxPanel.setPreferredSize(new Dimension(600, 400));
-        chatBoxPanel.setCurrentFriend(friend);
-        frame.add(new JScrollPane(chatBoxPanel));
-        frame.setVisible(true);
-        frame.pack();
-        chatBoxPanel.setCurrentFriend(friend);
-    }
-
-    @Override
-    public Dimension getPreferredSize()
-    {
-        return new Dimension(800, 600);
-    }
-}

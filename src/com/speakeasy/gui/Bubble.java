@@ -1,4 +1,4 @@
-package com.speakeasy;
+package com.speakeasy.gui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,7 +6,9 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.Optional;
 
 public class Bubble extends JPanel
 {
@@ -19,6 +21,8 @@ public class Bubble extends JPanel
     public Bubble(String message, LocalDateTime timestamp, int maxWidth)
     {
         setLayout(new BorderLayout());
+        setBorder(null);
+        setOpaque(false);
         messageDialog = new JButton(message);
         add(messageDialog, BorderLayout.CENTER);
         update = true;
@@ -26,12 +30,13 @@ public class Bubble extends JPanel
         this.maxWidth = maxWidth;
         this.bubbleTimestamp = new BubbleTimestamp(timestamp);
         add(this.bubbleTimestamp.getjLabel(), BorderLayout.SOUTH);
+        messageDialog.setFont(new Font("Deja Vu Sans", Font.BOLD, 12));
     }
+
 
     public void breakLine(Font f, FontRenderContext fontRenderContext)
     {
         String[] words = unformattedMessage.split("\\s+");
-
         int i = 0;
         StringBuilder messageBuilder = new StringBuilder();
         StringBuilder lineBuilder;
@@ -122,28 +127,27 @@ public class Bubble extends JPanel
     protected void paintComponent(Graphics g)
     {
         super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) getGraphics();
         if (update)
         {
-            Graphics2D g2 = (Graphics2D) getGraphics();
-            Font f = g2.getFont();
+            Font f = messageDialog.getFont();
             FontRenderContext fontRenderContext = g2.getFontRenderContext();
             breakLine(f, fontRenderContext);
             update = false;
         }
     }
 
-    public void setColor(Color color)
-    {
-        messageDialog.setOpaque(false);
-        messageDialog.setContentAreaFilled(false);
-        messageDialog.setBorderPainted(false);
-        messageDialog.setBackground(color);
-        messageDialog.setForeground(Color.WHITE);
-    }
-
     public BubbleTimestamp getBubbleTimestamp()
     {
         return bubbleTimestamp;
+    }
+
+    public static void main(String[] args)
+    {
+        Optional<String> biolinum = Arrays.stream(GraphicsEnvironment
+                .getLocalGraphicsEnvironment()
+                .getAvailableFontFamilyNames()).filter((font) -> font.contains("Biolinum")).findFirst();
+        biolinum.ifPresent(System.out::println);
     }
 }
 
@@ -155,8 +159,9 @@ class BubbleTimestamp
     public BubbleTimestamp(LocalDateTime time)
     {
         this.time = time;
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd E HH:mm:ss", Locale.forLanguageTag("pl"));
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(" yyyy-MM-dd E HH:mm:ss ", Locale.forLanguageTag("pl"));
         jLabel = new JLabel(time.format(dateTimeFormatter));
+        jLabel.setFont(new Font(Font.DIALOG, Font.ITALIC, 8));
     }
 
     public JLabel getjLabel()

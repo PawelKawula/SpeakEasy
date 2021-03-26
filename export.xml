@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<!DOCTYPE chat SYSTEM "chat.dtd">
+<chat>
+	<author>Pawel</author>
+	<message mine="no">
+		<date>2021-03-11T19:59:43.595683327</date>
+		<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et magna dignissim, semper odio vel, hendrerit dui. Suspendisse semper fringilla. </text>
+	</message>
+	<message mine="no">
+		<date>2021-03-11T19:59:43.597550198</date>
+		<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</text>
+	</message>
+	<message mine="yes">
+		<date>2021-03-11T19:59:43.597581088</date>
+		<text>Nunc nec dui pharetra sapien placerat facilisis eget euismod dolor. Etiam lorem.</text>
+	</message>
+	<message mine="yes">
+		<date>2021-03-11T19:59:43.597615084</date>
+		<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit, orci ac dapibus faucibus, urna nibh semper nunc, ut vulputate enim risus molestie metus. Nullam laoreet vestibulum dui, sed interdum. </text>
+	</message>
+	<message mine="yes">
+		<date>2021-03-11T19:59:43.597646523</date>
+		<text>Nullam laoreet vestibulum dui, sed interdum. </text>
+	</message>
+	<message mine="no">
+		<date>2021-03-11T19:59:43.597679732</date>
+		<text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse tristique bibendum pharetra. </text>
+	</message>
+	<message mine="no">
+		<date>2021-03-11T19:59:43.597711534</date>
+		<text>Donec facilisis dignissim quam quis rhoncus. Morbi sollicitudin aliquam orci vel aliquam.</text>
+	</message>
+	<message mine="no">
+		<date>2021-03-11T19:59:43.597746019</date>
+		<text>Vestibulum ultricies interdum dui, in imperdiet libero sollicitudin eget. Sed.</text>
+	</message>
+	<message mine="yes">
+		<date>2021-03-11T19:59:43.597782495</date>
+		<text>Nam quis eros lorem. Aliquam laoreet accumsan porta. Proin in libero dignissim, bibendum felis ac, condimentum orci. Nunc efficitur nibh. </text>
+	</message>
+	<message mine="yes">
+		<date>2021-03-11T19:59:43.597816619</date>
+		<text>Etiam urna. </text>
+	</message>
+</chat>
