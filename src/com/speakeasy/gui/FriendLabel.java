@@ -18,8 +18,11 @@ public class FriendLabel extends JPanel
     {
         this.friend = friend;
         setLayout(new BorderLayout());
-        setBackground(new Color(0x003566));
-        setBorder(BorderFactory.createEtchedBorder());
+        setBackground(UIManager.getColor("focus"));
+//        setBackground(new Color(0x003566));
+        setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEtchedBorder(),
+                BorderFactory.createEmptyBorder(4, 4, 4, 4)));
         setFont(new Font("Lato", Font.BOLD, 18));
 
         label = new JLabel(friend.getNickname());

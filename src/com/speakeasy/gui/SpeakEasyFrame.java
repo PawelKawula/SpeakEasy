@@ -22,6 +22,7 @@ public class SpeakEasyFrame extends JFrame
         JPanel chatPanel = new JPanel();
         chatPanel.setLayout(new BorderLayout());
 //        chatPanel.setBorder(BorderFactory.createLoweredBevelBorder());
+        chatPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
         chatPanel.add(chatBoxPanel, BorderLayout.CENTER);
 
         ChatInputPanel chatInputPanel = new ChatInputPanel(chatBoxPanel);

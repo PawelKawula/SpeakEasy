@@ -18,7 +18,11 @@ public class ChatInputPanel extends JPanel
        setBorder(BorderFactory.createEmptyBorder(5, 2, 5, 5));
 
       JTextField chatInput = new JTextField(60);
-      add(chatInput, BorderLayout.CENTER);
+      JPanel chatTextFieldPanel = new JPanel();
+      chatTextFieldPanel.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 5));
+      chatTextFieldPanel.setLayout(new BorderLayout());
+      chatTextFieldPanel.add(chatInput, BorderLayout.CENTER);
+      add(chatTextFieldPanel, BorderLayout.CENTER);
 
       ImageIcon sendIcon= new ImageIcon("send.png");
       sendIcon.setImage(sendIcon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));

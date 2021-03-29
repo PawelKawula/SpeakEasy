@@ -31,10 +31,10 @@ public class SpeakEasy
 //                UIManager.put( "nimbusSelectedText", new Color( 255, 255, 255) );
 //                UIManager.put( "nimbusSelectionBackground", new Color( 104, 93, 156) );
 //                UIManager.put( "text", new Color( 230, 230, 230) );
-//                UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+                UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 //                UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
 
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+//                UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
 //                UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
 //
 //                UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");

@@ -6,17 +6,15 @@ import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Locale;
-import java.util.Optional;
 
 public class Bubble extends JPanel
 {
-    private int maxWidth;
-    private String unformattedMessage;
+    private final int maxWidth;
+    private final String unformattedMessage;
     private boolean update;
-    private JButton messageDialog;
-    private BubbleTimestamp bubbleTimestamp;
+    private final JButton messageDialog;
+    private final BubbleTimestamp bubbleTimestamp;
 
     public Bubble(String message, LocalDateTime timestamp, int maxWidth)
     {
@@ -29,7 +27,7 @@ public class Bubble extends JPanel
         this.unformattedMessage = message;
         this.maxWidth = maxWidth;
         this.bubbleTimestamp = new BubbleTimestamp(timestamp);
-        add(this.bubbleTimestamp.getjLabel(), BorderLayout.SOUTH);
+        add(this.bubbleTimestamp.getTimeLabel(), BorderLayout.SOUTH);
         messageDialog.setFont(new Font("Deja Vu Sans", Font.BOLD, 12));
     }
 
@@ -72,13 +70,13 @@ public class Bubble extends JPanel
                     String part = word.substring(j, end);
                     if (end < wordLength)
                     {
-                        formattedPartBuilder.append(part + "<br>");
+                        formattedPartBuilder.append(part).append("<br>");
                         j = end;
                     }
                     else
                     {
-                        lineBuilder.append(part + " ");
-                        formattedLineBuilder.append(part + " ");
+                        lineBuilder.append(part).append(" ");
+                        formattedLineBuilder.append(part).append(" ");
                         j = end;
                     }
                 } while (j < wordLength);
@@ -103,8 +101,8 @@ public class Bubble extends JPanel
 
             while (lineLength + wordLength < maxWidthCharCount && i < words.length)
             {
-                lineBuilder.append(" " + words[i].replaceAll("<.*?>", ""));
-                formattedLineBuilder.append(" " + words[i++]);
+                lineBuilder.append(" ").append(words[i].replaceAll("<.*?>", ""));
+                formattedLineBuilder.append(" ").append(words[i++]);
                 lineLength = lineBuilder.length();
                 if (i < words.length)
                     wordLength = words[i].length();
@@ -142,31 +140,24 @@ public class Bubble extends JPanel
         return bubbleTimestamp;
     }
 
-    public static void main(String[] args)
-    {
-        Optional<String> biolinum = Arrays.stream(GraphicsEnvironment
-                .getLocalGraphicsEnvironment()
-                .getAvailableFontFamilyNames()).filter((font) -> font.contains("Biolinum")).findFirst();
-        biolinum.ifPresent(System.out::println);
-    }
 }
 
 class BubbleTimestamp
 {
-    private JLabel jLabel;
-    private LocalDateTime time;
+    private final JLabel timeLabel;
+    private final LocalDateTime time;
 
     public BubbleTimestamp(LocalDateTime time)
     {
         this.time = time;
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(" yyyy-MM-dd E HH:mm:ss ", Locale.forLanguageTag("pl"));
-        jLabel = new JLabel(time.format(dateTimeFormatter));
-        jLabel.setFont(new Font(Font.DIALOG, Font.ITALIC, 8));
+        timeLabel = new JLabel(time.format(dateTimeFormatter));
+        timeLabel.setFont(new Font(Font.DIALOG, Font.ITALIC, 8));
     }
 
-    public JLabel getjLabel()
+    public JLabel getTimeLabel()
     {
-        return jLabel;
+        return timeLabel;
     }
 
     public LocalDateTime getTime()

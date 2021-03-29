@@ -10,16 +10,15 @@ import java.util.Set;
 
 public class ChatBoxPanel extends JPanel
 {
-    public static int ICON_A = 38;
+    public static int ICON_A = 52;
 
     private Friend currentFriend;
     private final GridBagConstraints gbc;
-    private JPanel chatPanel;
-    private JPanel nicknamePanel;
-    private JLabel friendLabel;
+    private final JPanel chatPanel;
+    private final JPanel nicknamePanel;
+    private final JLabel friendLabel;
     private JLabel friendIcon;
-    private JLabel emptyLabel;
-    private JScrollPane chatScrollPane;
+    private final JLabel emptyLabel;
 
     public ChatBoxPanel()
     {
@@ -32,7 +31,7 @@ public class ChatBoxPanel extends JPanel
         chatPanel.setLayout(new BorderLayout());
         chatPanel.add(emptyLabel, BorderLayout.CENTER);
         chatPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-        chatScrollPane = new JScrollPane(chatPanel);
+        JScrollPane chatScrollPane = new JScrollPane(chatPanel);
         chatScrollPane.setBorder(null);
         add(chatScrollPane, BorderLayout.CENTER);
         gbc = new GridBagConstraints();
@@ -40,7 +39,10 @@ public class ChatBoxPanel extends JPanel
         nicknamePanel = new JPanel();
         nicknamePanel.setLayout(new BorderLayout());
         nicknamePanel.setBackground(SpeakEasyFrame.purple);
-        nicknamePanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 0));
+        nicknamePanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(-1, 0, 0, 0),
+                        BorderFactory.createRaisedSoftBevelBorder()),
+                BorderFactory.createEmptyBorder(5, 5, 7, 5)));
 
         friendLabel = new JLabel("No friend Selected");
         friendLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -55,7 +57,7 @@ public class ChatBoxPanel extends JPanel
 
     private Bubble makeBubble(LocalDateTime time, String message)
     {
-        Bubble bubble = new Bubble(message, time, getParent().getWidth() / 5 * 3);
+        Bubble bubble = new Bubble(message, time, getParent().getWidth() / 5 * 4);
         bubble.getMessageDialog().addActionListener((event) ->
             {
                 chatPanel.remove(bubble);
@@ -78,7 +80,7 @@ public class ChatBoxPanel extends JPanel
     {
         currentFriend.addMyMessage(time, message);
         Bubble bubble = makeBubble(time, message);
-        bubble.getBubbleTimestamp().getjLabel().setHorizontalAlignment(JLabel.RIGHT);
+        bubble.getBubbleTimestamp().getTimeLabel().setHorizontalAlignment(JLabel.RIGHT);
         bubble.getMessageDialog().setOpaque(true);
         bubble.getMessageDialog().setContentAreaFilled(true);
         gbc.anchor = GridBagConstraints.EAST;
@@ -124,36 +126,7 @@ public class ChatBoxPanel extends JPanel
                 return;
             }
 
-            initializeGridBagLayout();
-
-            gbc.insets = new Insets(10, 10, 10, 10);
-
-            Set<Map.Entry<LocalDateTime, Map.Entry<Boolean, String>>> combinedMessages =
-                    currentFriend.getCombinedMessages().entrySet();
-
-            for (Map.Entry<LocalDateTime, Map.Entry<Boolean, String>> entry : combinedMessages)
-            {
-                LocalDateTime key = entry.getKey();
-                Map.Entry<Boolean, String> value = entry.getValue();
-
-                if (value.getKey())
-                {
-                    gbc.gridx = 2;
-                    gbc.anchor = GridBagConstraints.EAST;
-                    Bubble bubble = makeBubble(key, value.getValue());
-                    bubble.getBubbleTimestamp().getjLabel().setHorizontalAlignment(JLabel.RIGHT);
-                    chatPanel.add(bubble, gbc);
-                }
-                else
-                {
-                    gbc.gridx = 0;
-                    gbc.anchor = GridBagConstraints.WEST;
-                    Bubble bubble = makeBubble(key, value.getValue());
-                    chatPanel.add(bubble, gbc);
-                }
-            }
-            chatPanel.revalidate();
-            chatPanel.repaint();
+            reloadBubbles();
         }
         else if (currentFriend == null)
         {
@@ -187,6 +160,40 @@ public class ChatBoxPanel extends JPanel
         chatPanel.add(new JLabel(""), gbc);
         gbc.gridy = 1;
 
+    }
+
+    public void reloadBubbles()
+    {
+        initializeGridBagLayout();
+
+        gbc.insets = new Insets(10, 10, 10, 10);
+
+        Set<Map.Entry<LocalDateTime, Map.Entry<Boolean, String>>> combinedMessages =
+                currentFriend.getCombinedMessages().entrySet();
+
+        for (Map.Entry<LocalDateTime, Map.Entry<Boolean, String>> entry : combinedMessages)
+        {
+            LocalDateTime key = entry.getKey();
+            Map.Entry<Boolean, String> value = entry.getValue();
+
+            if (value.getKey())
+            {
+                gbc.gridx = 2;
+                gbc.anchor = GridBagConstraints.EAST;
+                Bubble bubble = makeBubble(key, value.getValue());
+                bubble.getBubbleTimestamp().getTimeLabel().setHorizontalAlignment(JLabel.RIGHT);
+                chatPanel.add(bubble, gbc);
+            }
+            else
+            {
+                gbc.gridx = 0;
+                gbc.anchor = GridBagConstraints.WEST;
+                Bubble bubble = makeBubble(key, value.getValue());
+                chatPanel.add(bubble, gbc);
+            }
+        }
+        chatPanel.revalidate();
+        chatPanel.repaint();
     }
 
     public Friend getCurrentFriend()

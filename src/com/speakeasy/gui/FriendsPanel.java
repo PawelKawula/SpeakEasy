@@ -9,8 +9,8 @@ import java.awt.event.MouseEvent;
 
 public class FriendsPanel extends JPanel
 {
-    private ChatBoxPanel chatBoxPanel;
-    private JPanel friendsListPanel;
+    private final ChatBoxPanel chatBoxPanel;
+    private final JPanel friendsListPanel;
     private FriendLabel choosenLabel;
     GridBagConstraints gbc;
 
@@ -19,8 +19,7 @@ public class FriendsPanel extends JPanel
         chatBoxPanel = cBP;
 
         setLayout(new BorderLayout());
-//        setBorder(BorderFactory.createLoweredBevelBorder());
-        setBorder(null);
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
         gbc = new GridBagConstraints();
         gbc.gridy = 1;
 
@@ -39,27 +38,28 @@ public class FriendsPanel extends JPanel
         add(friendsListScrollPane, BorderLayout.CENTER);
 
         JPanel friendsInputPanel = new JPanel();
-//        friendsInputPanel.setBorder(BorderFactory.createCompoundBorder(
-//                BorderFactory.createRaisedSoftBevelBorder(),
-//                BorderFactory.createEmptyBorder(2, 4, 4, 4)));
-//        friendsInputPanel.setBorder(BorderFactory.createRaisedSoftBevelBorder());
+        friendsInputPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         friendsInputPanel.setLayout(new BorderLayout());
         add(friendsInputPanel, BorderLayout.SOUTH);
 
         JTextField friendsInput = new JTextField(12);
+        friendsInput.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(0, 0, 0, 6),
+                    friendsInput.getBorder()));
         friendsInputPanel.add(friendsInput, BorderLayout.CENTER);
 
         ImageIcon addIcon = new ImageIcon("plus.png");
         addIcon.setImage(addIcon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
         JButton friendsSubmit = new JButton(addIcon);
-        friendsSubmit.setVerticalAlignment(SwingConstants.CENTER);
         friendsSubmit.setBorderPainted(false);
         friendsSubmit.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createEmptyBorder(-3,15,-3,15), friendsSubmit.getBorder()));
+                BorderFactory.createEmptyBorder(-3,15,-3,15),
+                    friendsSubmit.getBorder()));
         friendsInputPanel.add(friendsSubmit, BorderLayout.EAST);
         friendsSubmit.addActionListener((event) ->
             {
-                if (!friendsInput.getText().trim().equals("")) addFriend(new Friend(friendsInput.getText(), null));
+                if (!friendsInput.getText().trim().equals(""))
+                    addFriend(new Friend(friendsInput.getText(), null));
             });
         choosenLabel = null;
     }
@@ -78,6 +78,8 @@ public class FriendsPanel extends JPanel
                 @Override
                 public void mouseReleased(MouseEvent e)
                 {
+                    if (e.getButton() != MouseEvent.BUTTON1)
+                        return;
                     super.mouseReleased(e);
                     choosenLabel.getLabel().setForeground(Color.GRAY);
                     chatBoxPanel.setCurrentFriend(friendLabel.getFriend());
