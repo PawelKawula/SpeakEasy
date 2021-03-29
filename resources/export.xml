@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
-<!DOCTYPE chat SYSTEM "chat.dtd">
+<!DOCTYPE chat SYSTEM "/home/debian/IdeaProjects/SpeakEasy/src/resources/chat.dtd">
 <chat>
 	<author>
 		<name>Adam</name>
-		<avatar>manface.jpg</avatar>
+		<avatar>resources/images/manface.jpg</avatar>
 	</author>
 	<message mine="no">
 		<date>2021-03-11T19:59:43.595683327</date>

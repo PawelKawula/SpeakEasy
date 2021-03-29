@@ -1,4 +1,4 @@
-package com.speakeasy.fileIO;
+package com.speakeasy.utils.fileIO;
 
 import javax.swing.text.Document;
 

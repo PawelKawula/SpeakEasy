@@ -1,14 +1,13 @@
-package com.speakeasy.gui;
-
-import com.speakeasy.logic.Friend;
+package com.speakeasy.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import com.speakeasy.core.models.Friend;
 
 public class FriendLabel extends JPanel
 {
-    private Friend friend;
-    private JLabel label;
+    private final Friend friend;
+    private final JLabel label;
     private JLabel icon;
     private ImageIcon imageIcon;
 
@@ -50,8 +49,8 @@ public class FriendLabel extends JPanel
     }
 
     public Friend getFriend()
-   {
-       return friend;
-   }
+    {
+        return friend;
+    }
 
 }

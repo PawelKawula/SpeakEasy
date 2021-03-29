@@ -3,6 +3,6 @@
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT avatar (#PCDATA)>
 <!ELEMENT message (date, text)>
-<!ATTLIST message mine (yes,no)>
+<!ATTLIST message mine (yes no)>
 <!ELEMENT text (#PCDATA)>
 <!ELEMENT date (#PCDATA)>

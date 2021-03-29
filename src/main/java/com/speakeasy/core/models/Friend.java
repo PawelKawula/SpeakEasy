@@ -1,9 +1,11 @@
-package com.speakeasy.logic;
+package com.speakeasy.core.models;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Friend
 {
@@ -65,7 +67,7 @@ public class Friend
         return combinedMessages;
     }
 
-    public void addMyMessage(LocalDateTime time ,String message)
+    public void addMyMessage(LocalDateTime time, String message)
     {
         myMessages.put(time, message);
     }

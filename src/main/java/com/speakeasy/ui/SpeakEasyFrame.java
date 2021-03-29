@@ -1,14 +1,14 @@
-package com.speakeasy.gui;
-
-import com.speakeasy.logic.Friend;
+package com.speakeasy.ui;
 
 import javax.swing.*;
+import java.awt.MenuBar;
 import java.awt.*;
+import com.speakeasy.core.models.Friend;
 
 public class SpeakEasyFrame extends JFrame
 {
-    private ChatBoxPanel chatBoxPanel;
-    private FriendsPanel friendsPanel;
+    private final ChatBoxPanel chatBoxPanel;
+    private final FriendsPanel friendsPanel;
 
     static final Color purple = new Color(37, 43, 50);
 
@@ -17,7 +17,7 @@ public class SpeakEasyFrame extends JFrame
         chatBoxPanel = new ChatBoxPanel();
 
         setLayout(new BorderLayout());
-        setIconImage(new ImageIcon("programicon.png").getImage());
+        setIconImage(new ImageIcon("resources/images/programicon.png").getImage());
 
         JPanel chatPanel = new JPanel();
         chatPanel.setLayout(new BorderLayout());
@@ -34,7 +34,7 @@ public class SpeakEasyFrame extends JFrame
         friendsPanel = new FriendsPanel(chatBoxPanel);
         add(friendsPanel, BorderLayout.WEST);
 
-        setJMenuBar(new MenuBar(chatBoxPanel, friendsPanel));
+        setJMenuBar(new ChatMenuBar(chatBoxPanel, friendsPanel));
 
         setPreferredSize(new Dimension(1200, 800));
         pack();

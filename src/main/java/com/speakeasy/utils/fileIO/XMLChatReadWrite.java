@@ -1,11 +1,8 @@
-package com.speakeasy.fileIO;
-
-import com.speakeasy.logic.Friend;
+package com.speakeasy.utils.fileIO;
 
 import javax.xml.stream.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import com.speakeasy.core.models.Friend;
+import java.io.*;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +13,7 @@ public class XMLChatReadWrite
 {
     public static Friend readChat(File file) throws IOException, XMLStreamException
     {
-        InputStream inputStream = file.toURL().openStream();
+        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
         XMLStreamReader parser = XMLInputFactory.newFactory().createXMLStreamReader(inputStream);
         int found = 0;
         Friend friend;
@@ -32,16 +29,13 @@ public class XMLChatReadWrite
                 {
                     name = parser.getElementText().trim();
                     ++found;
-                }
-                else if (parser.getLocalName().equals("avatar"))
+                } else if (parser.getLocalName().equals("avatar"))
                 {
                     avatar = parser.getElementText().trim();
                     ++found;
                 }
             }
         }
-
-        System.out.println(avatar);
 
         friend = new Friend(name, avatar);
 
@@ -71,8 +65,7 @@ public class XMLChatReadWrite
                             {
                                 timestamp = LocalDateTime.parse(parser.getElementText().trim());
                                 ++found;
-                            }
-                            else if (parser.getLocalName().equals("text"))
+                            } else if (parser.getLocalName().equals("text"))
                             {
                                 messageText = parser.getElementText().trim();
                                 ++found;
@@ -136,42 +129,6 @@ public class XMLChatReadWrite
             writer.writeEndElement();
         }
 
-//        for (Map.Entry<LocalDateTime, String> entry : friend.getMyMessages().entrySet())
-//        {
-//            LocalDateTime key = entry.getKey();
-//            String value = entry.getValue();
-//            writer.writeCharacters("\n\t");
-//            writer.writeStartElement("message");
-//            writer.writeAttribute("mine", "yes");
-//            writer.writeCharacters("\n\t\t");
-//            writer.writeStartElement("date");
-//            writer.writeCharacters(key.format(DateTimeFormatter.ISO_DATE_TIME));
-//            writer.writeEndElement();
-//            writer.writeCharacters("\n\t\t");
-//            writer.writeStartElement("text");
-//            writer.writeCharacters(value);
-//            writer.writeEndElement();
-//            writer.writeCharacters("\n\t");
-//            writer.writeEndElement();
-//        }
-//
-//        for (Map.Entry<LocalDateTime, String> entry : friend.getFriendMessages().entrySet())
-//        {
-//            LocalDateTime key = entry.getKey();
-//            String value = entry.getValue();
-//            writer.writeCharacters("\n\t");
-//            writer.writeStartElement("message");
-//            writer.writeCharacters("\n\t\t");
-//            writer.writeStartElement("date");
-//            writer.writeCharacters(key.format(DateTimeFormatter.ISO_DATE_TIME));
-//            writer.writeEndElement();
-//            writer.writeCharacters("\n\t\t");
-//            writer.writeStartElement("text");
-//            writer.writeCharacters(value);
-//            writer.writeEndElement();
-//            writer.writeCharacters("\n\t");
-//            writer.writeEndElement();
-//        }
         writer.writeCharacters("\n");
         writer.writeEndDocument();
         return true;

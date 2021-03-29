@@ -1,9 +1,8 @@
-package com.speakeasy.gui;
-
-import com.speakeasy.logic.Friend;
+package com.speakeasy.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import com.speakeasy.core.models.Friend;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
@@ -24,13 +23,13 @@ public class ChatBoxPanel extends JPanel
     {
         setLayout(new BorderLayout());
 
-        emptyLabel = new JLabel(new ImageIcon("emptyIcon.png"));
+        emptyLabel = new JLabel(new ImageIcon("resources/images/emptyIcon.png"));
 
         chatPanel = new JPanel();
         chatPanel.setBackground(SpeakEasyFrame.purple);
         chatPanel.setLayout(new BorderLayout());
         chatPanel.add(emptyLabel, BorderLayout.CENTER);
-        chatPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+        chatPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         JScrollPane chatScrollPane = new JScrollPane(chatPanel);
         chatScrollPane.setBorder(null);
         add(chatScrollPane, BorderLayout.CENTER);
@@ -57,13 +56,13 @@ public class ChatBoxPanel extends JPanel
 
     private Bubble makeBubble(LocalDateTime time, String message)
     {
-        Bubble bubble = new Bubble(message, time, getParent().getWidth() / 5 * 4);
+        Bubble bubble = new Bubble(message, time, getParent().getWidth() / 2);
         bubble.getMessageDialog().addActionListener((event) ->
-            {
-                chatPanel.remove(bubble);
-                revalidate();
-                repaint();
-            });
+        {
+            chatPanel.remove(bubble);
+            revalidate();
+            repaint();
+        });
         if (chatPanel.getLayout() instanceof BorderLayout)
         {
             chatPanel.removeAll();
@@ -81,8 +80,6 @@ public class ChatBoxPanel extends JPanel
         currentFriend.addMyMessage(time, message);
         Bubble bubble = makeBubble(time, message);
         bubble.getBubbleTimestamp().getTimeLabel().setHorizontalAlignment(JLabel.RIGHT);
-        bubble.getMessageDialog().setOpaque(true);
-        bubble.getMessageDialog().setContentAreaFilled(true);
         gbc.anchor = GridBagConstraints.EAST;
         gbc.gridx = 2;
         ++gbc.gridy;
@@ -127,8 +124,7 @@ public class ChatBoxPanel extends JPanel
             }
 
             reloadBubbles();
-        }
-        else if (currentFriend == null)
+        } else if (currentFriend == null)
         {
             this.currentFriend = null;
             nicknamePanel.remove(friendIcon);
@@ -183,8 +179,7 @@ public class ChatBoxPanel extends JPanel
                 Bubble bubble = makeBubble(key, value.getValue());
                 bubble.getBubbleTimestamp().getTimeLabel().setHorizontalAlignment(JLabel.RIGHT);
                 chatPanel.add(bubble, gbc);
-            }
-            else
+            } else
             {
                 gbc.gridx = 0;
                 gbc.anchor = GridBagConstraints.WEST;

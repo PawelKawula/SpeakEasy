@@ -1,15 +1,14 @@
 package com.speakeasy;
 
-
-import com.speakeasy.fileIO.XMLChatReadWrite;
-import com.speakeasy.gui.SpeakEasyFrame;
-import com.speakeasy.logic.Friend;
-
 import javax.swing.*;
+import com.speakeasy.core.models.Friend;
+import com.speakeasy.utils.fileIO.XMLChatReadWrite;
+
 import java.awt.*;
+import com.speakeasy.ui.SpeakEasyFrame;
 import java.io.File;
 
-public class SpeakEasy
+public class Main
 {
     public static void main(String[] args)
     {
@@ -48,13 +47,12 @@ public class SpeakEasy
                 frame.setTitle("SpeakEasy");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setVisible(true);
-                Friend sampleFriend1 = XMLChatReadWrite.readChat(new File("export.xml"));
-                Friend sampleFriend2 = XMLChatReadWrite.readChat(new File("samplechat.xml"));
+                Friend sampleFriend1 = XMLChatReadWrite.readChat(new File("resources/export.xml"));
+                Friend sampleFriend2 = XMLChatReadWrite.readChat(new File("resources/samplechat.xml"));
                 frame.getChatBoxPanel().setCurrentFriend(sampleFriend1);
                 frame.getFriendsPanel().addFriend(sampleFriend1);
                 frame.getFriendsPanel().addFriend(sampleFriend2);
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 e.printStackTrace();
             }

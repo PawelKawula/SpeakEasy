@@ -1,4 +1,4 @@
-package com.speakeasy.gui;
+package com.speakeasy.ui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,8 +72,7 @@ public class Bubble extends JPanel
                     {
                         formattedPartBuilder.append(part).append("<br>");
                         j = end;
-                    }
-                    else
+                    } else
                     {
                         lineBuilder.append(part).append(" ");
                         formattedLineBuilder.append(part).append(" ");
@@ -83,8 +82,7 @@ public class Bubble extends JPanel
 
                 messageBuilder.append(formattedPartBuilder.toString());
                 ++i;
-            }
-            else
+            } else
             {
                 if (++i >= words.length)
                 {
