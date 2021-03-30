@@ -1,0 +1,45 @@
+plugins {
+    id 'application'
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'idea'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+application{
+    mainClassName = 'com.speakeasy.Main'
+}
+
+task cleanClasses(type: Delete){
+    delete "${buildDir}/classes/java/main"
+    delete "${buildDir}/resources/java/main"
+}
+
+classes.dependsOn(cleanClasses)
+
+task runRelease(type: JavaExec){
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.speakeasy.Main'
+}
+
+task runDev(type: JavaExec){
+    classpath = sourceSets.main.runtimeClasspath
+    args '-dev'
+    main = 'com.speakeasy.Main'
+}
