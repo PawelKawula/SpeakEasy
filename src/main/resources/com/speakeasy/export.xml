@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE chat SYSTEM "/home/debian/IdeaProjects/SpeakEasy/src/resources/chat.dtd">
+<!DOCTYPE chat SYSTEM "/home/debian/IdeaProjects/SpeakEasy/src/main/resources/com/speakeasy/chat.dtd">
 <chat>
 	<author>
 		<name>Adam</name>
