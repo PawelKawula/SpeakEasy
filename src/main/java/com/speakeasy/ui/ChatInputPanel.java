@@ -24,7 +24,7 @@ public class ChatInputPanel extends JPanel
         chatTextFieldPanel.add(chatInput, BorderLayout.CENTER);
         add(chatTextFieldPanel, BorderLayout.CENTER);
 
-        ImageIcon sendIcon = new ImageIcon("resources/images/send.png");
+        ImageIcon sendIcon = new ImageIcon("src/main/resources/images/send.png");
         sendIcon.setImage(sendIcon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
         JButton chatSubmit = new JButton(sendIcon);
         chatSubmit.setVerticalAlignment(SwingConstants.CENTER);

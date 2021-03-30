@@ -47,8 +47,8 @@ public class Main
                 frame.setTitle("SpeakEasy");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setVisible(true);
-                Friend sampleFriend1 = XMLChatReadWrite.readChat(new File("resources/export.xml"));
-                Friend sampleFriend2 = XMLChatReadWrite.readChat(new File("resources/samplechat.xml"));
+                Friend sampleFriend1 = XMLChatReadWrite.readChat(new File("src/main/resources/export.xml"));
+                Friend sampleFriend2 = XMLChatReadWrite.readChat(new File("src/main/resources/samplechat.xml"));
                 frame.getChatBoxPanel().setCurrentFriend(sampleFriend1);
                 frame.getFriendsPanel().addFriend(sampleFriend1);
                 frame.getFriendsPanel().addFriend(sampleFriend2);

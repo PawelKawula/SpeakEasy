@@ -23,7 +23,7 @@ public class ChatBoxPanel extends JPanel
     {
         setLayout(new BorderLayout());
 
-        emptyLabel = new JLabel(new ImageIcon("resources/images/emptyIcon.png"));
+        emptyLabel = new JLabel(new ImageIcon("src/main/src/main/resources/images/emptyIcon.png"));
 
         chatPanel = new JPanel();
         chatPanel.setBackground(SpeakEasyFrame.purple);

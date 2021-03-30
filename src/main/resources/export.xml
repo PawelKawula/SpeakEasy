@@ -3,7 +3,7 @@
 <chat>
 	<author>
 		<name>Adam</name>
-		<avatar>resources/images/manface.jpg</avatar>
+		<avatar>src/main/resources/images/manface.jpg</avatar>
 	</author>
 	<message mine="no">
 		<date>2021-03-11T19:59:43.595683327</date>

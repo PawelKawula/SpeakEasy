@@ -47,7 +47,7 @@ public class FriendsPanel extends JPanel
                 friendsInput.getBorder()));
         friendsInputPanel.add(friendsInput, BorderLayout.CENTER);
 
-        ImageIcon addIcon = new ImageIcon("resources/images/plus.png");
+        ImageIcon addIcon = new ImageIcon("src/main/resources/images/plus.png");
         addIcon.setImage(addIcon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
         JButton friendsSubmit = new JButton(addIcon);
         friendsSubmit.setBorderPainted(false);
@@ -106,7 +106,7 @@ public class FriendsPanel extends JPanel
 
         JPopupMenu popup = new JPopupMenu();
         JMenuItem item = new JMenuItem("Delete Friend", new ImageIcon(
-                new ImageIcon("/resources/images/deleteicon.png")
+                new ImageIcon("/src/main/resources/images/deleteicon.png")
                         .getImage().getScaledInstance(14, 14, Image.SCALE_DEFAULT)));
         item.addActionListener((deleteButtonEvent) ->
         {
