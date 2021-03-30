@@ -6,10 +6,10 @@ import com.speakeasy.core.models.Friend;
 
 public class FriendLabel extends JPanel
 {
-    private final Friend friend;
-    private final JLabel label;
-    private JLabel icon;
-    private ImageIcon imageIcon;
+    private final   Friend friend;
+    private final   JLabel label;
+    private         JLabel icon;
+    private         ImageIcon imageIcon;
 
     public static int ICON_A = 32;
 

@@ -17,7 +17,7 @@ public class SpeakEasyFrame extends JFrame
         chatBoxPanel = new ChatBoxPanel();
 
         setLayout(new BorderLayout());
-        setIconImage(new ImageIcon("src/main/resources/images/programicon.png").getImage());
+        setIconImage(new ImageIcon("src/main/resources/com/speakeasy/images/programicon.png").getImage());
 
         JPanel chatPanel = new JPanel();
         chatPanel.setLayout(new BorderLayout());

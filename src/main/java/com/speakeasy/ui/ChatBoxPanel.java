@@ -11,19 +11,19 @@ public class ChatBoxPanel extends JPanel
 {
     public static int ICON_A = 52;
 
-    private Friend currentFriend;
-    private final GridBagConstraints gbc;
-    private final JPanel chatPanel;
-    private final JPanel nicknamePanel;
-    private final JLabel friendLabel;
-    private JLabel friendIcon;
-    private final JLabel emptyLabel;
+    private         Friend currentFriend;
+    private final   GridBagConstraints gbc;
+    private final   JPanel chatPanel;
+    private final   JPanel nicknamePanel;
+    private final   JLabel friendLabel;
+    private         JLabel friendIcon;
+    private final   JLabel emptyLabel;
 
     public ChatBoxPanel()
     {
         setLayout(new BorderLayout());
 
-        emptyLabel = new JLabel(new ImageIcon("src/main/src/main/resources/images/emptyIcon.png"));
+        emptyLabel = new JLabel(new ImageIcon("src/main/src/main/resources/com/speakeasy/images/emptyIcon.png"));
 
         chatPanel = new JPanel();
         chatPanel.setBackground(SpeakEasyFrame.purple);

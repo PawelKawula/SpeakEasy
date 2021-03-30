@@ -13,9 +13,9 @@ import static com.speakeasy.ui.SpeakEasyFrame.createChatBoxFrame;
 public class ChatMenuBar extends JMenuBar
 {
 
-    JMenuItem exportItem;
-    ChatBoxPanel chatBoxPanel;
-    FriendsPanel friendsPanel;
+    JMenuItem       exportItem;
+    ChatBoxPanel    chatBoxPanel;
+    FriendsPanel    friendsPanel;
 
     public ChatMenuBar(ChatBoxPanel cBP, FriendsPanel fP)
     {

@@ -10,11 +10,11 @@ import java.util.Locale;
 
 public class Bubble extends JPanel
 {
-    private final int maxWidth;
-    private final String unformattedMessage;
+    private final   int maxWidth;
+    private final   String rawMessage;
     private boolean update;
-    private final JButton messageDialog;
-    private final BubbleTimestamp bubbleTimestamp;
+    private final   JButton messageDialog;
+    private final   BubbleTimestamp bubbleTimestamp;
 
     public Bubble(String message, LocalDateTime timestamp, int maxWidth)
     {
@@ -24,7 +24,7 @@ public class Bubble extends JPanel
         messageDialog = new JButton(message);
         add(messageDialog, BorderLayout.CENTER);
         update = true;
-        this.unformattedMessage = message;
+        this.rawMessage = message.replaceAll("\n", "<br>");
         this.maxWidth = maxWidth;
         this.bubbleTimestamp = new BubbleTimestamp(timestamp);
         add(this.bubbleTimestamp.getTimeLabel(), BorderLayout.SOUTH);
@@ -34,7 +34,7 @@ public class Bubble extends JPanel
 
     public void breakLine(Font f, FontRenderContext fontRenderContext)
     {
-        String[] words = unformattedMessage.split("\\s+");
+        String[] words = rawMessage.split("\\s+");
         int i = 0;
         StringBuilder messageBuilder = new StringBuilder();
         StringBuilder lineBuilder;
