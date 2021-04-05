@@ -1,27 +1,31 @@
-package com.speakeasy.ui;
+package com.speakeasy.client.ui;
 
 import javax.swing.*;
-import java.awt.MenuBar;
 import java.awt.*;
 import com.speakeasy.core.models.Friend;
+import com.speakeasy.utils.ChatConstants;
 
 public class SpeakEasyFrame extends JFrame
 {
     private final ChatBoxPanel chatBoxPanel;
     private final FriendsPanel friendsPanel;
+    private final JDialog loginDialog;
+    public static final ImageIcon iconImage = new ImageIcon(ChatConstants.RESOURCE_LOCATION + "images/programicon.png");
 
     static final Color purple = new Color(37, 43, 50);
 
     public SpeakEasyFrame()
     {
+        loginDialog = new LoginDialog(this);
+        loginDialog.setVisible(true);
+
         chatBoxPanel = new ChatBoxPanel();
 
         setLayout(new BorderLayout());
-        setIconImage(new ImageIcon("src/main/resources/com/speakeasy/images/programicon.png").getImage());
+        setIconImage(iconImage.getImage());
 
         JPanel chatPanel = new JPanel();
         chatPanel.setLayout(new BorderLayout());
-//        chatPanel.setBorder(BorderFactory.createLoweredBevelBorder());
         chatPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
         chatPanel.add(chatBoxPanel, BorderLayout.CENTER);
 

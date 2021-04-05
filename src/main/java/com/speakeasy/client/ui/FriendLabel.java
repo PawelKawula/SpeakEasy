@@ -1,8 +1,9 @@
-package com.speakeasy.ui;
+package com.speakeasy.client.ui;
 
 import javax.swing.*;
 import java.awt.*;
 import com.speakeasy.core.models.Friend;
+import com.speakeasy.utils.ChatConstants;
 
 public class FriendLabel extends JPanel
 {
@@ -18,7 +19,6 @@ public class FriendLabel extends JPanel
         this.friend = friend;
         setLayout(new BorderLayout());
         setBackground(UIManager.getColor("focus"));
-//        setBackground(new Color(0x003566));
         setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEtchedBorder(),
                 BorderFactory.createEmptyBorder(4, 4, 4, 4)));
@@ -31,9 +31,10 @@ public class FriendLabel extends JPanel
         add(label, BorderLayout.CENTER);
 
         if (friend.getAvatar() == null)
-            return;
-        imageIcon = new ImageIcon(friend.getAvatar().getImage()
-                .getScaledInstance(ICON_A, ICON_A, Image.SCALE_DEFAULT));
+            imageIcon = new ImageIcon(ChatConstants.RESOURCE_LOCATION + "images/noimage.png");
+        else
+            imageIcon = new ImageIcon(friend.getAvatar().getImage()
+                    .getScaledInstance(ICON_A, ICON_A, Image.SCALE_DEFAULT));
         icon = new AvatarLabel(imageIcon, ICON_A);
         add(icon, BorderLayout.WEST);
     }

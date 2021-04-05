@@ -3,7 +3,7 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+group 'com.speakeasy'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'idea'
@@ -11,19 +11,11 @@ apply plugin: 'application'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
-dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-}
-
-test {
-    useJUnitPlatform()
-}
-
-application{
-    mainClassName = 'com.speakeasy.Main'
+dependencies{
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.4'
 }
 
 task cleanClasses(type: Delete){
@@ -31,15 +23,24 @@ task cleanClasses(type: Delete){
     delete "${buildDir}/resources/java/main"
 }
 
-classes.dependsOn(cleanClasses)
-
-task runRelease(type: JavaExec){
+task runClientRelease(type: JavaExec){
     classpath = sourceSets.main.runtimeClasspath
-    main = 'com.speakeasy.Main'
+    main = 'com.speakeasy.client.ChatClient'
 }
 
-task runDev(type: JavaExec){
+task runClientDev(type: JavaExec){
     classpath = sourceSets.main.runtimeClasspath
     args '-dev'
-    main = 'com.speakeasy.Main'
+    main = 'com.speakeasy.client.ChatClient'
+}
+
+task runServRelease(type: JavaExec){
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.speakeasy.server.ChatServer'
+}
+
+task runServDev(type: JavaExec){
+    classpath = sourceSets.main.runtimeClasspath
+    args '-dev'
+    main = 'com.speakeasy.server.ChatServer'
 }

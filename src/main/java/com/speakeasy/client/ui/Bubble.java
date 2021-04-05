@@ -1,4 +1,4 @@
-package com.speakeasy.ui;
+package com.speakeasy.client.ui;
 
 import javax.swing.*;
 import java.awt.*;

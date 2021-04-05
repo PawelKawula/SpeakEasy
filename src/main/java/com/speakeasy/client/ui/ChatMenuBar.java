@@ -1,14 +1,14 @@
-package com.speakeasy.ui;
+package com.speakeasy.client.ui;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.stream.XMLStreamException;
 import com.speakeasy.core.models.Friend;
-import com.speakeasy.utils.fileIO.XMLChatReadWrite;
+import com.speakeasy.client.fileIO.XMLChatReadWrite;
 import java.io.File;
 import java.io.IOException;
 
-import static com.speakeasy.ui.SpeakEasyFrame.createChatBoxFrame;
+import static com.speakeasy.client.ui.SpeakEasyFrame.createChatBoxFrame;
 
 public class ChatMenuBar extends JMenuBar
 {
