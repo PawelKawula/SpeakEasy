@@ -10,12 +10,14 @@ apply plugin: 'idea'
 apply plugin: 'application'
 
 repositories {
+    mavenLocal()
     mavenCentral()
     jcenter()
 }
 
 dependencies{
-    implementation 'io.reactivex.rxjava3:rxjava:3.0.4'
+//    implementation 'io.reactivex.rxjava3:rxjava:3.0.11'
+    implementation group: 'org.apache.derby', name: 'derbyclient', version: '10.14.2.0'
 }
 
 task cleanClasses(type: Delete){

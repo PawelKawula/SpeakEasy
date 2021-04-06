@@ -1,7 +1,8 @@
 package com.speakeasy.client.ui;
 
+import com.speakeasy.client.net.Handler;
 import com.speakeasy.core.models.Credentials;
-import com.speakeasy.core.net.ChatConnectionHandler;
+import com.speakeasy.client.net.LoginHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,8 +72,8 @@ public class LoginDialog extends JDialog
             {
                 if (loginField.getText().trim().equals("") || passwordField.getPassword().length == 0)
                     return;
-                ChatConnectionHandler chatConnectionHandler = new ChatConnectionHandler(getCredentials());
-                if (chatConnectionHandler.login().get())
+                LoginHandler chatConnectionHandler = new LoginHandler(getCredentials());
+                if (chatConnectionHandler.login().get() != Handler.FAILED_LOGIN)
                 {
                     dispose();
                     parent.setVisible(true);
