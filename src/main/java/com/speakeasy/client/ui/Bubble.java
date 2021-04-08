@@ -138,28 +138,27 @@ public class Bubble extends JPanel
         return bubbleTimestamp;
     }
 
-}
-
-class BubbleTimestamp
-{
-    private final JLabel timeLabel;
-    private final LocalDateTime time;
-
-    public BubbleTimestamp(LocalDateTime time)
+    public class BubbleTimestamp
     {
-        this.time = time;
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(" yyyy-MM-dd E HH:mm:ss ", Locale.forLanguageTag("pl"));
-        timeLabel = new JLabel(time.format(dateTimeFormatter));
-        timeLabel.setFont(new Font(Font.DIALOG, Font.ITALIC, 8));
-    }
+        private final JLabel timeLabel;
+        private final LocalDateTime time;
 
-    public JLabel getTimeLabel()
-    {
-        return timeLabel;
-    }
+        public BubbleTimestamp(LocalDateTime time)
+        {
+            this.time = time;
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(" yyyy-MM-dd E HH:mm:ss ", Locale.forLanguageTag("pl"));
+            timeLabel = new JLabel(time.format(dateTimeFormatter));
+            timeLabel.setFont(new Font(Font.DIALOG, Font.ITALIC, 8));
+        }
 
-    public LocalDateTime getTime()
-    {
-        return time;
+        public JLabel getTimeLabel()
+        {
+            return timeLabel;
+        }
+
+        public LocalDateTime getTime()
+        {
+            return time;
+        }
     }
 }

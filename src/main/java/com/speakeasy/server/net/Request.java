@@ -1,18 +1,13 @@
 package com.speakeasy.server.net;
 
-public enum Request
+public interface Request
 {
-    LOGIN_REQUEST(0), FRIEND_SELECT_REQUEST(1), MESSAGES_SELECT_REQUEST(2),
-    MESSAGES_SEND_REQUEST(3), LOGOUT_REQUEST(4), ACCOUNT_ALTERCATION_REQUEST(5);
-
-    private final int value;
-    private Request(int value)
-    {
-        this.value = value;
-    }
-
-    public int getValue()
-    {
-        return value;
-    }
+    int LOGIN_REQUEST = 0;
+    int FRIENDS_REFRESH = 1;
+    int MESSAGES_REFRESH = 2;
+    int MESSAGES_SEND_REQUEST = 3;
+    int LOGOUT_REQUEST = 4;
+    int ACCUNT_ALTERCATION_REQUEST = 5;
+    int SUCCESS = 6;
+    int FAILURE = 7;
 }

@@ -2,17 +2,20 @@ package com.speakeasy.server;
 
 import com.speakeasy.client.net.Handler;
 import com.speakeasy.core.models.Credentials;
+import com.speakeasy.server.net.FriendsRefreshRequest;
 import com.speakeasy.server.net.LoginRequest;
-import com.speakeasy.server.net.Request;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static com.speakeasy.server.net.Request.*;
 
 public class ChatServer
 {
@@ -20,7 +23,7 @@ public class ChatServer
     public static final ConcurrentHashMap<Integer, String> hostToUserMap =
             new ConcurrentHashMap<>();
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException
+    public static void main(String[] args)
     {
         try (ServerSocket serverSocket = new ServerSocket(chatPort))
         {
@@ -35,7 +38,7 @@ public class ChatServer
                     {
                         DataInputStream in = new DataInputStream(s.getInputStream());
                         DataOutputStream out = new DataOutputStream(s.getOutputStream());
-                        Request requestType = Request.values()[in.readInt()];
+                        int requestType = in.readInt();
                         switch (requestType)
                         {
                             case LOGIN_REQUEST:
@@ -44,8 +47,11 @@ public class ChatServer
                                 Credentials credentials = new Credentials(uname, passwd);
                                 int answer = new LoginRequest(credentials).execute();
                                 if (answer == Handler.DATABASE_FAILURE)
+                                {
+                                    System.out.println("failur");
                                     return;
-                                if (answer == Handler.SUCCESFUL_LOGIN)
+                                }
+                                if (answer == Handler.SUCCESS)
                                 {
                                     int id = ThreadLocalRandom.current().
                                             nextInt(Integer.MAX_VALUE - 1) + 1;
@@ -56,9 +62,22 @@ public class ChatServer
                                 else
                                     out.writeBoolean(false);
                                 break;
-                            case FRIEND_SELECT_REQUEST:
+                            case FRIENDS_REFRESH:
+                                long start = System.currentTimeMillis();
+                                int token = in.readInt();
+                                String user = hostToUserMap.getOrDefault(token, null);
+                                System.out.println("user: " + user);
+                                if (user != null)
+                                {
+                                    System.out.println("Autoryzacja uzytkownika");
+                                    out.writeInt(Handler.SUCCESS);
+                                    FriendsRefreshRequest request = new FriendsRefreshRequest(out, user);
+                                    if (request.execute() != Handler.DATABASE_FAILURE)
+                                        request.send();
+                                }
+                                System.out.println(System.currentTimeMillis());
                                 break;
-                            case MESSAGES_SELECT_REQUEST:
+                            case MESSAGES_REFRESH:
                                 break;
                         }
                     }

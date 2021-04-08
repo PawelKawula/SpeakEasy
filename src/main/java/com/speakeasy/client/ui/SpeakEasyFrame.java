@@ -1,44 +1,37 @@
 package com.speakeasy.client.ui;
 
-import javax.swing.*;
-import java.awt.*;
+import com.speakeasy.client.controllers.ChatController;
+import com.speakeasy.client.models.ChatModel;
+import com.speakeasy.client.views.ChatView;
 import com.speakeasy.core.models.Friend;
 import com.speakeasy.utils.ChatConstants;
 
+import javax.swing.*;
+import java.awt.*;
+
 public class SpeakEasyFrame extends JFrame
 {
-    private final ChatBoxPanel chatBoxPanel;
-    private final FriendsPanel friendsPanel;
     private final JDialog loginDialog;
-    public static final ImageIcon iconImage = new ImageIcon(ChatConstants.RESOURCE_LOCATION + "images/programicon.png");
+    public static final ImageIcon iconImage = new ImageIcon(
+            ChatConstants.RESOURCE_LOCATION + "images/programicon.png");
 
-    static final Color purple = new Color(37, 43, 50);
+    public static final Color purple = new Color(37, 43, 50);
 
     public SpeakEasyFrame()
     {
         loginDialog = new LoginDialog(this);
         loginDialog.setVisible(true);
 
-        chatBoxPanel = new ChatBoxPanel();
-
         setLayout(new BorderLayout());
         setIconImage(iconImage.getImage());
 
-        JPanel chatPanel = new JPanel();
-        chatPanel.setLayout(new BorderLayout());
-        chatPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
-        chatPanel.add(chatBoxPanel, BorderLayout.CENTER);
+        ChatSegment chatSegment = new ChatSegment();
+        add(chatSegment, BorderLayout.CENTER);
 
-        ChatInputPanel chatInputPanel = new ChatInputPanel(chatBoxPanel);
-        chatInputPanel.setOpaque(false);
-        chatPanel.add(chatInputPanel, BorderLayout.SOUTH);
+        FriendsSegment friendsSegment = new FriendsSegment(chatSegment.getChatController());
+        add(friendsSegment, BorderLayout.WEST);
 
-        add(chatPanel, BorderLayout.CENTER);
-
-        friendsPanel = new FriendsPanel(chatBoxPanel);
-        add(friendsPanel, BorderLayout.WEST);
-
-        setJMenuBar(new ChatMenuBar(chatBoxPanel, friendsPanel));
+        setJMenuBar(new ChatMenuBar(friendsSegment.getFriendsController()));
 
         setPreferredSize(new Dimension(1200, 800));
         pack();
@@ -55,22 +48,14 @@ public class SpeakEasyFrame extends JFrame
     {
         JFrame frame = new JFrame("import");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        ChatBoxPanel chatBoxPanel = new ChatBoxPanel();
+        ChatModel chatModel = new ChatModel();
+        ChatView chatView = new ChatView(chatModel);
+        ChatController controller = new ChatController(chatView, chatModel);
         frame.setPreferredSize(new Dimension(600, 400));
-        frame.add(chatBoxPanel);
+        frame.add(chatView);
         frame.setVisible(true);
         frame.pack();
-        chatBoxPanel.setCurrentFriend(friend);
-    }
-
-    public ChatBoxPanel getChatBoxPanel()
-    {
-        return chatBoxPanel;
-    }
-
-    public FriendsPanel getFriendsPanel()
-    {
-        return friendsPanel;
+        controller.setFriend(friend);
     }
 
     @Override

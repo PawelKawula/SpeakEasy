@@ -1,7 +1,8 @@
 package com.speakeasy.client.fileIO;
 
-import javax.xml.stream.*;
 import com.speakeasy.core.models.Friend;
+
+import javax.xml.stream.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.time.LocalDateTime;

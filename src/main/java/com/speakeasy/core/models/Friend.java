@@ -25,7 +25,6 @@ public class Friend
         this.myMessages = new TreeMap<>();
         this.friendMessages = new TreeMap<>();
         this.iconFile = iconFile;
-        this.iconFile = null;
         this.avatar = null;
         if (iconFile != null)
         {

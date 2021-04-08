@@ -9,7 +9,7 @@ public class AvatarLabel extends JLabel
 
     public AvatarLabel(ImageIcon icon, int icon_a)
     {
-        super(icon);
+        super(new ImageIcon(icon.getImage().getScaledInstance(icon_a, icon_a, Image.SCALE_SMOOTH)));
         this.icon_a = icon_a;
     }
 

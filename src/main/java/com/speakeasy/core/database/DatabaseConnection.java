@@ -30,7 +30,6 @@ public class DatabaseConnection
         }
         String drivers = props.getProperty("jdbc.drivers");
         if (drivers != null) System.setProperty("jdbc.drivers", drivers);
-        System.out.println(props.getProperty("jdbc.drivers"));
         String url = props.getProperty("jdbc.url");
         String username = props.getProperty("jdbc.username");
         String password = props.getProperty("jdbc.password");

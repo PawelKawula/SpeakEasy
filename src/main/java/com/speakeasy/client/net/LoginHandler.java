@@ -4,11 +4,12 @@ import com.speakeasy.core.models.Credentials;
 import com.speakeasy.server.ChatServer;
 import com.speakeasy.server.net.Request;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 
 public class LoginHandler
 {
@@ -19,32 +20,27 @@ public class LoginHandler
         this.credentials = credentials;
     }
 
-    public FutureTask<Integer> login() throws ExecutionException, InterruptedException
+    public int login() throws ExecutionException, InterruptedException, IOException
     {
-        FutureTask<Integer> success = new FutureTask<>(() ->
+        try (Socket s = new Socket(InetAddress.getLocalHost(), ChatServer.chatPort))
             {
-            try (Socket s = new Socket(InetAddress.getLocalHost(), ChatServer.chatPort))
-                {
-                    System.out.println("Polaczono z serwerem");
-                    DataOutputStream out = new DataOutputStream(s.getOutputStream());
+                DataOutputStream out = new DataOutputStream(s.getOutputStream());
 
-                    out.writeInt(Request.LOGIN_REQUEST.getValue());
-                    out.writeUTF(credentials.getUserName());
-                    out.writeUTF(credentials.getPassword());
+                out.writeInt(Request.LOGIN_REQUEST);
+                out.writeUTF(credentials.getUserName());
+                out.writeUTF(credentials.getPassword());
+                System.out.println("wyslano");
 
-                    DataInputStream in = new DataInputStream(s.getInputStream());
-                    if (in.readBoolean())
-                        return in.readInt();
-                    else
-                        return Handler.FAILED_LOGIN;
-                }
-            });
-        new Thread(success).start();
-        return success;
+                DataInputStream in = new DataInputStream(s.getInputStream());
+                if (in.readBoolean())
+                    return in.readInt();
+                else
+                    return Handler.QUERY_FAILURE;
+            }
     }
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException
+    public static void main(String[] args)
     {
-        new LoginHandler(new Credentials("user", "secret")).login();
+        new LoginHandler(new Credentials("user", "secret"));
     }
 }

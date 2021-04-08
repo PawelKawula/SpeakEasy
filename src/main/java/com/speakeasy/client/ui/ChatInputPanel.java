@@ -1,16 +1,18 @@
 package com.speakeasy.client.ui;
 
+import com.speakeasy.client.controllers.ChatController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
 
 public class ChatInputPanel extends JPanel
 {
-    private final ChatBoxPanel chatBoxPanel;
+    private final ChatController chatController;
 
-    public ChatInputPanel(ChatBoxPanel cBP)
+    public ChatInputPanel(ChatController chatController)
     {
-        chatBoxPanel = cBP;
+        this.chatController= chatController;
         setLayout(new BorderLayout());
 //      setBorder(BorderFactory.createCompoundBorder(
 //              BorderFactory.createRaisedSoftBevelBorder(),
@@ -34,7 +36,7 @@ public class ChatInputPanel extends JPanel
 
         chatSubmit.addActionListener((event) ->
         {
-            if (chatBoxPanel.getCurrentFriend() == null)
+            if (chatController.getFriend() == null)
                 return;
 
             String message = chatInput.getText().trim();
@@ -43,9 +45,9 @@ public class ChatInputPanel extends JPanel
                 return;
 
             if (message.charAt(0) == 'o')
-                chatBoxPanel.addFriendMessage(LocalDateTime.now(), message.substring(1));
+                chatController.addFriendMessage(LocalDateTime.now(), message.substring(1));
             else
-                chatBoxPanel.addMyMessage(LocalDateTime.now(), message);
+                chatController.addMyMessage(LocalDateTime.now(), message);
         });
 
         add(chatSubmit, BorderLayout.EAST);

@@ -1,11 +1,12 @@
 package com.speakeasy.client.ui;
 
 import com.speakeasy.client.net.Handler;
-import com.speakeasy.core.models.Credentials;
 import com.speakeasy.client.net.LoginHandler;
+import com.speakeasy.core.models.Credentials;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class LoginDialog extends JDialog
@@ -13,7 +14,7 @@ public class LoginDialog extends JDialog
     private final JTextField loginField;
     private final JPasswordField passwordField;
 
-    public LoginDialog(JFrame parent)
+    public LoginDialog(SpeakEasyFrame parent)
     {
         super(parent);
 
@@ -63,38 +64,69 @@ public class LoginDialog extends JDialog
         gbc.gridx = 0;
         add(buttonPanel, gbc);
 
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setFont(new Font("Lato", Font.BOLD, 22));
+        cancelButton.addActionListener((ev) ->
+        {
+            if (!parent.isVisible())
+                System.exit(0);
+        });
+
         JButton confirmButton = new JButton("Login");
         confirmButton.setFont(new Font("Lato", Font.BOLD, 22));
         confirmButton.addActionListener((ev) ->
         {
-            System.out.println("Confirm");
-            try
+            System.out.println("klik");
+            if (loginField.getText().trim().equals("") || passwordField.getPassword().length == 0)
+                return;
+            new Thread(() ->
             {
-                if (loginField.getText().trim().equals("") || passwordField.getPassword().length == 0)
-                    return;
-                LoginHandler chatConnectionHandler = new LoginHandler(getCredentials());
-                if (chatConnectionHandler.login().get() != Handler.FAILED_LOGIN)
+                System.out.println("Query logowania");
+                try
                 {
-                    dispose();
-                    parent.setVisible(true);
+                    LoginHandler chatConnectionHandler = new LoginHandler(getCredentials());
+                    int token = chatConnectionHandler.login();
+                    if (token != Handler.QUERY_FAILURE)
+                    {
+                        parent.setVisible(true);
+                        dispose();
+                    }
+                } catch (ExecutionException | InterruptedException e)
+                {
+                    e.printStackTrace();
+                } catch (IOException e)
+                {
+                    System.out.println("Błąd połączenia przy logowaniu");
+                    e.printStackTrace();
                 }
-            }
-            catch (ExecutionException | InterruptedException e)
-            {
-                e.printStackTrace();
-            }
+//
+//                if (token != Handler.QUERY_FAILURE)
+//                {
+//                    try
+//                    {
+//                        FriendsRefreshHandler refreshHandler = new FriendsRefreshHandler(token);
+//                        if (refreshHandler.execute() != Handler.DATABASE_FAILURE)
+//                        {
+//                            ArrayList<Friend> friends = refreshHandler.getFriends();
+//                            FriendsSegment friendsPanel = parent.getFriendsPanel();
+//                            for (Friend f : friends)
+//                                friendsPanel.addFriend(f);
+//                        }
+//                    } catch (Exception e)
+//                    {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                dispose();
+//                parent.revalidate();
+//                parent.setVisible(true);
+//            }).start();
+//
+//            cancelButton.setEnabled(true);
+            }).start();
         });
         buttonPanel.add(confirmButton);
-
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.setFont(new Font("Lato", Font.BOLD, 22));
-        cancelButton.addActionListener((ev) ->
-            {
-                if (!parent.isVisible())
-                    System.exit(0);
-            });
-
-
+        buttonPanel.add(cancelButton);
         pack();
     }
 

@@ -1,27 +1,20 @@
 package com.speakeasy.client.ui;
 
+import com.speakeasy.client.controllers.FriendsController;
+import com.speakeasy.client.fileIO.XMLChatReadWrite;
+import com.speakeasy.core.models.Friend;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.stream.XMLStreamException;
-import com.speakeasy.core.models.Friend;
-import com.speakeasy.client.fileIO.XMLChatReadWrite;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-import static com.speakeasy.client.ui.SpeakEasyFrame.createChatBoxFrame;
-
 public class ChatMenuBar extends JMenuBar
 {
-
-    JMenuItem       exportItem;
-    ChatBoxPanel    chatBoxPanel;
-    FriendsPanel    friendsPanel;
-
-    public ChatMenuBar(ChatBoxPanel cBP, FriendsPanel fP)
+    public ChatMenuBar(FriendsController friendsController)
     {
-        chatBoxPanel = cBP;
-        friendsPanel = fP;
-
         JMenu jMenu = new JMenu("File");
         add(jMenu);
 
@@ -31,12 +24,12 @@ public class ChatMenuBar extends JMenuBar
         jFileChooser.setCurrentDirectory(new File("."));
         jFileChooser.setFileFilter(new FileNameExtensionFilter("XML files", "xml"));
 
-        exportItem = new JMenuItem("Export Chat");
+        JMenuItem exportItem = new JMenuItem("Export Chat");
         exportItem.setEnabled(false);
         exportItem.addActionListener((event) ->
         {
             int result = jFileChooser.showSaveDialog(this);
-            Friend currentFriend = chatBoxPanel.getCurrentFriend();
+            Friend currentFriend = friendsController.getChatController().getFriend();
             File file = jFileChooser.getSelectedFile();
             if (result == JFileChooser.APPROVE_OPTION)
             {
@@ -60,7 +53,7 @@ public class ChatMenuBar extends JMenuBar
                 try
                 {
                     Friend friend = XMLChatReadWrite.readChat(file);
-                    createChatBoxFrame(friend);
+                    SpeakEasyFrame.createChatBoxFrame(friend);
                 } catch (XMLStreamException | IOException e)
                 {
                     e.printStackTrace();
@@ -74,22 +67,12 @@ public class ChatMenuBar extends JMenuBar
         friendsView.addActionListener((event) ->
         {
             revalidate();
-            friendsPanel.setVisible(!friendsPanel.isVisible());
-            friendsPanel.getParent().revalidate();
-            friendsPanel.getParent().repaint();
+            Component friendsSegment = friendsController.getSegment();
+            friendsSegment.setVisible(!friendsSegment.isVisible());
+            friendsSegment.getParent().revalidate();
+            friendsSegment.getParent().repaint();
         });
         viewMenu.add(friendsView);
         add(viewMenu);
-    }
-
-    @Override
-    public void revalidate()
-    {
-        if (exportItem != null)
-        {
-            exportItem.setEnabled(chatBoxPanel != null && chatBoxPanel.getCurrentFriend() != null);
-        }
-        super.revalidate();
-        repaint();
     }
 }

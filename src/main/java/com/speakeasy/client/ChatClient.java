@@ -1,9 +1,9 @@
 package com.speakeasy.client;
 
-import javax.swing.*;
-
-import java.awt.*;
 import com.speakeasy.client.ui.SpeakEasyFrame;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class ChatClient
 {
