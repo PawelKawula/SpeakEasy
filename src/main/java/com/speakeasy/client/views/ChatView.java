@@ -1,9 +1,9 @@
 package com.speakeasy.client.views;
 
 import com.speakeasy.client.models.ChatModel;
-import com.speakeasy.client.ui.Bubble;
-import com.speakeasy.client.ui.NicknamePanel;
-import com.speakeasy.client.ui.SpeakEasyFrame;
+import com.speakeasy.client.ui.chatSegment.Bubble;
+import com.speakeasy.client.ui.chatSegment.NicknamePanel;
+import com.speakeasy.client.ui.main.SpeakEasyFrame;
 import com.speakeasy.utils.ChatConstants;
 
 import javax.swing.*;

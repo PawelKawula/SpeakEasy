@@ -1,7 +1,7 @@
 package com.speakeasy.client.controllers;
 
 import com.speakeasy.client.models.FriendsModel;
-import com.speakeasy.client.ui.FriendListItem;
+import com.speakeasy.client.ui.friendSegment.FriendListItem;
 import com.speakeasy.client.views.FriendsView;
 import com.speakeasy.core.models.Friend;
 

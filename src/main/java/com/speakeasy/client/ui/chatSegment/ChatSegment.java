@@ -1,4 +1,4 @@
-package com.speakeasy.client.ui;
+package com.speakeasy.client.ui.chatSegment;
 
 import com.speakeasy.client.controllers.ChatController;
 import com.speakeasy.client.models.ChatModel;

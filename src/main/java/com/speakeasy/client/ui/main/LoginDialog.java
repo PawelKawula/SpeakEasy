@@ -1,20 +1,23 @@
-package com.speakeasy.client.ui;
+package com.speakeasy.client.ui.main;
 
+import com.speakeasy.client.controllers.FriendsController;
+import com.speakeasy.client.net.FriendsRefreshHandler;
 import com.speakeasy.client.net.Handler;
 import com.speakeasy.client.net.LoginHandler;
 import com.speakeasy.core.models.Credentials;
+import com.speakeasy.core.models.Friend;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
 
 public class LoginDialog extends JDialog
 {
     private final JTextField loginField;
     private final JPasswordField passwordField;
 
-    public LoginDialog(SpeakEasyFrame parent)
+    public LoginDialog(SpeakEasyFrame parent, FriendsController controller)
     {
         super(parent);
 
@@ -82,63 +85,46 @@ public class LoginDialog extends JDialog
             new Thread(() ->
             {
                 System.out.println("Query logowania");
+                int token = Handler.QUERY_FAILURE;
                 try
                 {
-                    LoginHandler chatConnectionHandler = new LoginHandler(getCredentials());
-                    int token = chatConnectionHandler.login();
+                    token = new LoginHandler(getCredentials()).execute();
                     if (token != Handler.QUERY_FAILURE)
                     {
                         parent.setVisible(true);
                         dispose();
                     }
-                } catch (ExecutionException | InterruptedException e)
-                {
-                    e.printStackTrace();
-                } catch (IOException e)
+                }
+                catch (IOException e)
                 {
                     System.out.println("Błąd połączenia przy logowaniu");
                     e.printStackTrace();
                 }
-//
-//                if (token != Handler.QUERY_FAILURE)
-//                {
-//                    try
-//                    {
-//                        FriendsRefreshHandler refreshHandler = new FriendsRefreshHandler(token);
-//                        if (refreshHandler.execute() != Handler.DATABASE_FAILURE)
-//                        {
-//                            ArrayList<Friend> friends = refreshHandler.getFriends();
-//                            FriendsSegment friendsPanel = parent.getFriendsPanel();
-//                            for (Friend f : friends)
-//                                friendsPanel.addFriend(f);
-//                        }
-//                    } catch (Exception e)
-//                    {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                dispose();
-//                parent.revalidate();
-//                parent.setVisible(true);
-//            }).start();
-//
-//            cancelButton.setEnabled(true);
+
+                if (token != Handler.QUERY_FAILURE)
+                {
+                    try
+                    {
+                        FriendsRefreshHandler refreshHandler = new FriendsRefreshHandler(token);
+                        if (refreshHandler.execute() != Handler.DATABASE_FAILURE)
+                        {
+                            ArrayList<Friend> friends = refreshHandler.getFriends();
+                            for (Friend f : friends)
+                                controller.addFriend(f);
+                        }
+                    } catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                dispose();
+                parent.revalidate();
+                parent.setVisible(true);
             }).start();
         });
         buttonPanel.add(confirmButton);
         buttonPanel.add(cancelButton);
         pack();
-    }
-
-    public static void main(String[] args)
-    {
-        LoginDialog lg = new LoginDialog(new SpeakEasyFrame());
-        lg.setVisible(true);
-    }
-
-    public void login()
-    {
-
     }
 
     public Credentials getCredentials()

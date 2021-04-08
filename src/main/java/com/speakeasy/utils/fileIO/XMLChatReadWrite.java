@@ -1,4 +1,4 @@
-package com.speakeasy.client.fileIO;
+package com.speakeasy.utils.fileIO;
 
 import com.speakeasy.core.models.Friend;
 

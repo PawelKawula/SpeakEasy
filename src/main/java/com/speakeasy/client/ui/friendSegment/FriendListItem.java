@@ -1,4 +1,4 @@
-package com.speakeasy.client.ui;
+package com.speakeasy.client.ui.friendSegment;
 
 import com.speakeasy.client.controllers.FriendLabelMouseListener;
 import com.speakeasy.client.controllers.FriendLabelPopupMenu;

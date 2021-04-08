@@ -26,14 +26,14 @@ public class LoginRequest
             "SELECT * FROM Users WHERE username = ? AND password = ?";
 
     public LoginRequest(DataInputStream in, DataOutputStream out,
-                        ConcurrentHashMap<Integer, String> map) throws IOException
+                        Map<Integer, String> map) throws IOException
     {
         this.in = in;
         this.out = out;
         this.map = map;
     }
 
-    public void execute() throws SQLException, IOException
+    public void execute() throws  IOException
     {
         cred = new Credentials(in.readUTF(), in.readUTF());
         int token = Handler.DATABASE_FAILURE;
@@ -51,6 +51,11 @@ public class LoginRequest
                 else
                     token = Handler.QUERY_FAILURE;
             }
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Błąd bazy danych");
+            e.printStackTrace();
         }
         finally
         {

@@ -10,8 +10,6 @@ import java.sql.*;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 
 public class FriendsRefreshRequest
 {
@@ -27,7 +25,7 @@ public class FriendsRefreshRequest
     + "AND (Users.id <> Friendships.active AND Users.id <> Friendships.passive)";
 
     public FriendsRefreshRequest(DataInputStream in, DataOutputStream out,
-                                 ConcurrentHashMap<Integer, String> hostMap)
+                                 Map<Integer, String> hostMap)
     {
         this.out = out;
         this.in = in;
@@ -35,7 +33,7 @@ public class FriendsRefreshRequest
         this.friends = new TreeMap<>();
     }
 
-    public void execute() throws ExecutionException, InterruptedException, IOException, SQLException
+    public void execute() throws IOException
     {
         String username = hostMap.get(in.readInt());
         boolean success = false;
@@ -63,6 +61,11 @@ public class FriendsRefreshRequest
                 }
             }
             success = true;
+        }
+        catch (SQLException e)
+        {
+            System.out.println("Blad bazy danych");
+            e.printStackTrace();
         }
         finally
         {

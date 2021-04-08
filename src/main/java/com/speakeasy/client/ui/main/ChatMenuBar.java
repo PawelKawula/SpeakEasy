@@ -1,7 +1,7 @@
-package com.speakeasy.client.ui;
+package com.speakeasy.client.ui.main;
 
 import com.speakeasy.client.controllers.FriendsController;
-import com.speakeasy.client.fileIO.XMLChatReadWrite;
+import com.speakeasy.utils.fileIO.XMLChatReadWrite;
 import com.speakeasy.core.models.Friend;
 
 import javax.swing.*;

@@ -9,7 +9,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.concurrent.ExecutionException;
 
 public class LoginHandler
 {
@@ -20,7 +19,7 @@ public class LoginHandler
         this.credentials = credentials;
     }
 
-    public int login() throws ExecutionException, InterruptedException, IOException
+    public int execute() throws IOException
     {
         try (Socket s = new Socket(InetAddress.getLocalHost(), ChatServer.chatPort))
             {

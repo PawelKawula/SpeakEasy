@@ -1,8 +1,9 @@
-package com.speakeasy.client.ui;
+package com.speakeasy.client.ui.friendSegment;
 
 import com.speakeasy.client.controllers.ChatController;
 import com.speakeasy.client.controllers.FriendsController;
 import com.speakeasy.client.models.FriendsModel;
+import com.speakeasy.client.ui.main.SpeakEasyFrame;
 import com.speakeasy.client.views.FriendsView;
 
 import javax.swing.*;

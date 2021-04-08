@@ -2,8 +2,8 @@ package com.speakeasy.client.views;
 
 import com.speakeasy.client.controllers.FriendsController;
 import com.speakeasy.client.models.FriendsModel;
-import com.speakeasy.client.ui.FriendListItem;
-import com.speakeasy.client.ui.SpeakEasyFrame;
+import com.speakeasy.client.ui.friendSegment.FriendListItem;
+import com.speakeasy.client.ui.main.SpeakEasyFrame;
 import com.speakeasy.core.models.Friend;
 
 import javax.swing.*;
@@ -12,24 +12,26 @@ import java.awt.*;
 public class FriendsView extends JPanel
 {
     GridBagConstraints gbc;
+    FriendsModel model;
 
-    public FriendsView(FriendsModel friendsModel)
+    public FriendsView(FriendsModel model)
     {
+        this.model = model;
         setBackground(SpeakEasyFrame.purple);
         setLayout(new GridBagLayout());
 
         gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.SOUTH;
         gbc.weightx = 1;
+        gbc.gridy = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.SOUTH;
     }
 
     public void addFriendPanel(Friend friend, FriendsController friendsController)
     {
-        FriendListItem friendListItem = new FriendListItem(friend, friendsController);
-        friendListItem.setBorder(BorderFactory.createTitledBorder("FriendListItem"));
-        add(friendListItem, gbc);
         ++gbc.gridy;
+        FriendListItem friendListItem = new FriendListItem(friend, friendsController);
+        add(friendListItem, gbc);
     }
 
     public void removeFriendPanel(Friend friend)

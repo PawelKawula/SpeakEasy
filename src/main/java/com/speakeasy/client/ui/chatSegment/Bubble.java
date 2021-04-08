@@ -1,4 +1,4 @@
-package com.speakeasy.client.ui;
+package com.speakeasy.client.ui.chatSegment;
 
 import javax.swing.*;
 import java.awt.*;

@@ -8,16 +8,15 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 
 import static com.speakeasy.server.net.Request.*;
 
 public class ChatServer
 {
     public static int chatPort = 8189;
-    private static final ConcurrentHashMap<Integer, String> hostMap =
+    private static final Map<Integer, String> hostMap =
             new ConcurrentHashMap<>();
 
     public static void main(String[] args)
@@ -48,8 +47,9 @@ public class ChatServer
                                 break;
                         }
                     }
-                    catch (IOException | SQLException | ExecutionException | InterruptedException e)
+                    catch (IOException e)
                     {
+                        System.out.println("Utracono polaczenie z hostem");
                         e.printStackTrace();
                     }
 

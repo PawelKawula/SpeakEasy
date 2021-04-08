@@ -1,6 +1,8 @@
-package com.speakeasy.client.ui;
+package com.speakeasy.client.ui.chatSegment;
 
 import com.speakeasy.client.models.ChatModel;
+import com.speakeasy.client.ui.main.SpeakEasyFrame;
+import com.speakeasy.client.ui.friendSegment.AvatarLabel;
 import com.speakeasy.core.models.Friend;
 
 import javax.swing.*;

@@ -1,6 +1,6 @@
 package com.speakeasy.client;
 
-import com.speakeasy.client.ui.SpeakEasyFrame;
+import com.speakeasy.client.ui.main.SpeakEasyFrame;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,9 @@
-package com.speakeasy.client.ui;
+package com.speakeasy.client.ui.main;
 
 import com.speakeasy.client.controllers.ChatController;
 import com.speakeasy.client.models.ChatModel;
+import com.speakeasy.client.ui.chatSegment.ChatSegment;
+import com.speakeasy.client.ui.friendSegment.FriendsSegment;
 import com.speakeasy.client.views.ChatView;
 import com.speakeasy.core.models.Friend;
 import com.speakeasy.utils.ChatConstants;
@@ -19,8 +21,6 @@ public class SpeakEasyFrame extends JFrame
 
     public SpeakEasyFrame()
     {
-        loginDialog = new LoginDialog(this);
-        loginDialog.setVisible(true);
 
         setLayout(new BorderLayout());
         setIconImage(iconImage.getImage());
@@ -30,6 +30,9 @@ public class SpeakEasyFrame extends JFrame
 
         FriendsSegment friendsSegment = new FriendsSegment(chatSegment.getChatController());
         add(friendsSegment, BorderLayout.WEST);
+
+        loginDialog = new LoginDialog(this, friendsSegment.getFriendsController());
+        loginDialog.setVisible(true);
 
         setJMenuBar(new ChatMenuBar(friendsSegment.getFriendsController()));
 
