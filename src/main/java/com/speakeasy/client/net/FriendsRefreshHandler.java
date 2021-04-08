@@ -35,7 +35,7 @@ public class FriendsRefreshHandler
             out.writeInt(token);
 
             DataInputStream in = new DataInputStream(s.getInputStream());
-            if (in.readInt() == Handler.SUCCESS)
+            if (in.readInt() == Handler.SUCCESS && in.readInt() == Handler.SUCCESS)
             {
                 System.out.println("Udalo sie autoryzowac");
                 int friendCount = in.readInt();
