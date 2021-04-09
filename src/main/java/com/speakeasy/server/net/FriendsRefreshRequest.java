@@ -19,7 +19,7 @@ public class FriendsRefreshRequest
     private final   Map<Integer, String> hostMap;
 
     private final static String findFriendsQuery =
-            "SELECT Users.username, Users.avatar "
+      "SELECT Users.username, Users.avatar "
     + "FROM Friendships, Users, (SELECT id FROM Users WHERE username = ?) AS fID WHERE "
     + "(Friendships.active = fID.id OR Friendships.passive = fID.id) "
     + "AND (Users.id <> Friendships.active AND Users.id <> Friendships.passive)";

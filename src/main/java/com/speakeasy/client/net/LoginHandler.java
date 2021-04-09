@@ -13,13 +13,15 @@ import java.net.Socket;
 public class LoginHandler
 {
     Credentials credentials;
+    int token;
 
     public LoginHandler(Credentials credentials)
     {
         this.credentials = credentials;
+        token = Handler.QUERY_FAILURE;
     }
 
-    public int execute() throws IOException
+    public void execute()
     {
         try (Socket s = new Socket(InetAddress.getLocalHost(), ChatServer.chatPort))
             {
@@ -32,14 +34,17 @@ public class LoginHandler
 
                 DataInputStream in = new DataInputStream(s.getInputStream());
                 if (in.readBoolean())
-                    return in.readInt();
-                else
-                    return Handler.QUERY_FAILURE;
+                    token = in.readInt();
             }
+        catch (IOException e)
+        {
+            System.out.println("Logging in not successful due to net error");
+            e.printStackTrace();
+        }
     }
 
-    public static void main(String[] args)
+    public int getToken()
     {
-        new LoginHandler(new Credentials("user", "secret"));
+        return token;
     }
 }

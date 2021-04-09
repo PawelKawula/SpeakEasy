@@ -1,5 +1,6 @@
 package com.speakeasy.client.net;
 
+import com.speakeasy.client.controllers.FriendsController;
 import com.speakeasy.core.database.DatabaseConnection;
 import com.speakeasy.core.models.Friend;
 import com.speakeasy.server.ChatServer;
@@ -25,7 +26,7 @@ public class FriendsRefreshHandler
         friends = new ArrayList<>();
     }
 
-    public int execute()
+    public void execute(FriendsController controller)
     {
         try (Socket s = new Socket(InetAddress.getLocalHost(), ChatServer.chatPort))
         {
@@ -55,66 +56,23 @@ public class FriendsRefreshHandler
                     }
                     friends.add(new Friend(name, imgFile.getPath()));
                 }
-                return Handler.SUCCESS;
-            } else
-                return Handler.QUERY_FAILURE;
+                refreshFriends(controller);
+            }
         }
         catch (IOException e)
         {
-            return Handler.QUERY_FAILURE;
+            System.out.println("Friends Refresh unsucessful");
         }
+    }
+
+    public void refreshFriends(FriendsController controller)
+    {
+        for (Friend f : friends)
+            controller.addFriend(f);
     }
 
     public ArrayList<Friend> getFriends()
     {
         return friends;
-    }
-
-    public static void main(String[] args) throws SQLException, IOException
-    {
-        InputStream in = new FileInputStream(ChatConstants.RESOURCE_LOCATION + "images/womanface.jpg");
-        String uname = "Ewa";
-        String passwd = "secret";
-        String query = "INSERT INTO Users(username, password, avatar) VALUES(?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stat = conn.prepareStatement(query))
-        {
-            stat.setString(1, uname);
-            stat.setString(2, passwd);
-            stat.setBlob(3, in);
-            stat.executeUpdate();
-        }
-
-//        String query = "SELECT * FROM Users";
-//        try (Connection conn = DatabaseConnection.getConnection();
-//                PreparedStatement stat = conn.prepareStatement(query))
-//        {
-//            try (ResultSet result = stat.executeQuery())
-//            {
-//                int i = 1;
-//                while (result.next())
-//                {
-//                    Blob blob = result.getBlob("avatar");
-//                    int streamLength = (int) blob.length();
-//                    byte[] in = blob.getBinaryStream().readAllBytes();
-//                    FileOutputStream out;
-//                    if (i == 1)
-//                       out = new FileOutputStream("cache/test" + i + ".jpg");
-//                    else
-//                        out = new FileOutputStream("cache/test" + i + ".png");
-//                    out.write(in, 0, streamLength);
-//                }
-//            }
-//        }
-//        JFrame frame = new JFrame("Picture test");
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new BorderLayout());
-//        JLabel label1 = new JLabel(new ImageIcon("cache/test1.jpg"));
-//        JLabel label2 = new JLabel(new ImageIcon("cache/test2.png"));
-//        frame.add(panel);
-//        panel.add(label1, BorderLayout.WEST);
-//        panel.add(label2, BorderLayout.EAST);
-//        frame.pack();
-//        frame.setVisible(true);
     }
 }
