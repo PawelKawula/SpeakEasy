@@ -41,13 +41,10 @@ public class ChatInputPanel extends JPanel
 
             String message = chatInput.getText().trim();
 
-            if (message.trim().equals(""))
+            if (message.equals(""))
                 return;
 
-            if (message.charAt(0) == 'o')
-                chatController.addFriendMessage(LocalDateTime.now(), message.substring(1));
-            else
-                chatController.addMyMessage(LocalDateTime.now(), message);
+            chatController.addMyMessage(LocalDateTime.now(), message);
         });
 
         add(chatSubmit, BorderLayout.EAST);

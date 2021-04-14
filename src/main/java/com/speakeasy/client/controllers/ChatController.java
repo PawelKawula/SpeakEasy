@@ -5,11 +5,13 @@ import com.speakeasy.client.views.ChatView;
 import com.speakeasy.core.models.Friend;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class ChatController
 {
     ChatView view;
     ChatModel model;
+    int token;
 
     public ChatController(ChatView view, ChatModel model)
     {
@@ -33,12 +35,25 @@ public class ChatController
         view.repaint();
     }
 
-    public void addFriendMessage(LocalDateTime time, String message)
+    public void fetchNewMessages(Map<LocalDateTime, Map.Entry<Boolean, String>> newMessages)
     {
-        model.getFriend().addFriendMessage(time, message);
-        view.addFriendBubble(time, message);
-        view.revalidate();
-        view.repaint();
+        model.addNewMessages(newMessages);
+        view.updateView();
+    }
+
+    public void updateView()
+    {
+        view.updateView();
+    }
+
+    public int getToken()
+    {
+        return token;
+    }
+
+    public void setToken(int token)
+    {
+        this.token = token;
     }
 
     public Friend getFriend()

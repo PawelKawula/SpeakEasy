@@ -1,18 +1,13 @@
 package com.speakeasy.client.net;
 
 import com.speakeasy.client.controllers.FriendsController;
-import com.speakeasy.core.database.DatabaseConnection;
 import com.speakeasy.core.models.Friend;
 import com.speakeasy.server.ChatServer;
-import com.speakeasy.server.net.Request;
-import com.speakeasy.utils.ChatConstants;
+import com.speakeasy.server.requests.Request;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class FriendsRefreshHandler
@@ -65,7 +60,7 @@ public class FriendsRefreshHandler
         }
     }
 
-    public void refreshFriends(FriendsController controller)
+    private void refreshFriends(FriendsController controller)
     {
         for (Friend f : friends)
             controller.addFriend(f);

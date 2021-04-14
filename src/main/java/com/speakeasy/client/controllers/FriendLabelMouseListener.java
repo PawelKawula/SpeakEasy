@@ -1,8 +1,10 @@
 package com.speakeasy.client.controllers;
 
+import com.speakeasy.client.net.MessagesRefreshHandler;
 import com.speakeasy.client.ui.friendSegment.FriendListItem;
 import com.speakeasy.core.models.Friend;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -28,9 +30,16 @@ public class FriendLabelMouseListener extends MouseAdapter
         super.mouseReleased(e);
         friendListItem.getLabel().setForeground(Color.GRAY);
         Friend prevSelectedFriend = chatController.getFriend();
-        friendsController.getFriendLabel(prevSelectedFriend)
-                .setForeground(Color.GRAY);
+        if (prevSelectedFriend != null)
+        {
+            JLabel prevListItemLabel = friendsController.getFriendLabel(prevSelectedFriend).getLabel();
+            prevListItemLabel.setForeground(Color.GRAY);
+            prevListItemLabel.revalidate();
+            prevListItemLabel.repaint();
+        }
         chatController.setFriend(friendListItem.getFriend());
+        new MessagesRefreshHandler(chatController.getFriend(), chatController.getToken()).execute();
+        chatController.updateView();
         friendListItem.getLabel().setForeground(Color.WHITE);
         friendListItem.revalidate();
         friendListItem.repaint();

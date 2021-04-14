@@ -2,7 +2,7 @@ package com.speakeasy.client.net;
 
 import com.speakeasy.core.models.Credentials;
 import com.speakeasy.server.ChatServer;
-import com.speakeasy.server.net.Request;
+import com.speakeasy.server.requests.Request;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

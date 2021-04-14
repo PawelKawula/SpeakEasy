@@ -4,7 +4,6 @@ import com.speakeasy.core.models.Friend;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Set;
 
 public class ChatModel
 {
@@ -22,6 +21,17 @@ public class ChatModel
         this.friend = friend;
     }
 
+    public void addNewMessages(Map<LocalDateTime, Map.Entry<Boolean, String>> newMessages)
+    {
+        newMessages.forEach((key, value) ->
+            {
+                if (value.getKey())
+                    friend.addMyMessage(key, value.getValue());
+                else
+                    friend.addFriendMessage(key, value.getValue());
+            });
+    }
+
     public Friend getFriend()
     {
         return friend;
@@ -32,9 +42,9 @@ public class ChatModel
         return previousFriend;
     }
 
-    public Set<Map.Entry<LocalDateTime, Map.Entry<Boolean, String>>> getCombinedMessages()
+    public Map<LocalDateTime, Map.Entry<Boolean, String>> getCombinedMessages()
     {
-        return friend.getCombinedMessages().entrySet();
+        return friend.getCombinedMessages();
     }
 
     public boolean friendChanged()

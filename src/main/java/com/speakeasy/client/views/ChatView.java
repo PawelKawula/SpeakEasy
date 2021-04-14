@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Set;
 
 public class ChatView extends JPanel
 {
@@ -18,7 +17,7 @@ public class ChatView extends JPanel
     private final   JPanel chatPanel;
     private final   JLabel emptyLabel;
     private final   ChatModel model;
-    private final NicknamePanel nicknamePanel;
+    private final   NicknamePanel nicknamePanel;
 
     public ChatView(ChatModel model)
     {
@@ -76,6 +75,10 @@ public class ChatView extends JPanel
             reloadBox();
         else if (model.getFriend() == null)
             emptyBox();
+        else
+            return;
+        revalidate();
+        repaint();
     }
 
     private void initializeGridBagLayout()
@@ -115,19 +118,16 @@ public class ChatView extends JPanel
 
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        Set<Map.Entry<LocalDateTime, Map.Entry<Boolean, String>>> combinedMessages =
+       Map<LocalDateTime, Map.Entry<Boolean, String>> combinedMessages =
                 model.getCombinedMessages();
 
-        for (Map.Entry<LocalDateTime, Map.Entry<Boolean, String>> entry : combinedMessages)
-        {
-            LocalDateTime key = entry.getKey();
-            Map.Entry<Boolean, String> value = entry.getValue();
-
-            if (value.getKey())
-                addMyBubble(key, value.getValue());
-            else
-                addFriendBubble(key, value.getValue());
-        }
+       combinedMessages.forEach((key, value) ->
+           {
+               if (value.getKey())
+                   addMyBubble(key, value.getValue());
+               else
+                   addFriendBubble(key, value.getValue());
+           });
     }
 
     private void emptyBox()

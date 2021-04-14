@@ -1,7 +1,9 @@
 package com.speakeasy.server;
 
-import com.speakeasy.server.net.FriendsRefreshRequest;
-import com.speakeasy.server.net.LoginRequest;
+import com.speakeasy.client.net.MessagesRefreshHandler;
+import com.speakeasy.server.requests.FriendsRefreshRequest;
+import com.speakeasy.server.requests.LoginRequest;
+import com.speakeasy.server.requests.MessagesRefreshRequest;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,7 +13,7 @@ import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.speakeasy.server.net.Request.*;
+import static com.speakeasy.server.requests.Request.*;
 
 public class ChatServer
 {
@@ -37,14 +39,10 @@ public class ChatServer
                         int requestType = in.readInt();
                         switch (requestType)
                         {
-                            case LOGIN_REQUEST:
-                                new LoginRequest(in, out, hostMap).execute();
-                                break;
-                            case FRIENDS_REFRESH:
-                                new FriendsRefreshRequest(in, out, hostMap).execute();
-                                break;
-                            case MESSAGES_REFRESH:
-                                break;
+                            case LOGIN_REQUEST -> new LoginRequest(in, out, hostMap).execute();
+                            case FRIENDS_REFRESH -> new FriendsRefreshRequest(in, out, hostMap).execute();
+                            case MESSAGES_REFRESH -> new MessagesRefreshRequest(in, out, hostMap).execute();
+                            default -> System.out.println("Zly requestType");
                         }
                     }
                     catch (IOException e)

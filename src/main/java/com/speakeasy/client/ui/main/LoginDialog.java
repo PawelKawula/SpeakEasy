@@ -80,10 +80,13 @@ public class LoginDialog extends JDialog
                 {
                     parent.setVisible(true);
                     dispose();
+                    FriendsRefreshHandler handler = new FriendsRefreshHandler(token);
+                    handler.execute(controller);
+                    controller.getChatController().setToken(token);
                 }
 
-                if (token != Handler.QUERY_FAILURE)
-                    new FriendsRefreshHandler(token).refreshFriends(controller);
+
+
 
             }).start();
         });

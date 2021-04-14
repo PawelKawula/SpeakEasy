@@ -1,4 +1,4 @@
-package com.speakeasy.server.net;
+package com.speakeasy.server.requests;
 
 public interface Request
 {
@@ -7,7 +7,7 @@ public interface Request
     int MESSAGES_REFRESH = 2;
     int MESSAGES_SEND_REQUEST = 3;
     int LOGOUT_REQUEST = 4;
-    int ACCUNT_ALTERCATION_REQUEST = 5;
+    int ACCOUNT_ALTERCATION_REQUEST = 5;
     int SUCCESS = 6;
     int FAILURE = 7;
 }

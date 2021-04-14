@@ -1,4 +1,4 @@
-package com.speakeasy.server.net;
+package com.speakeasy.server.requests;
 
 import com.speakeasy.client.net.Handler;
 import com.speakeasy.core.database.DatabaseConnection;
@@ -12,7 +12,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class LoginRequest

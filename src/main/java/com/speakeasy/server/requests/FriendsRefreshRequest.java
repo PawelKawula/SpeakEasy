@@ -1,4 +1,4 @@
-package com.speakeasy.server.net;
+package com.speakeasy.server.requests;
 
 import com.speakeasy.client.net.Handler;
 import com.speakeasy.core.database.DatabaseConnection;
@@ -8,7 +8,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 public class FriendsRefreshRequest
@@ -21,8 +20,8 @@ public class FriendsRefreshRequest
     private final static String findFriendsQuery =
       "SELECT Users.username, Users.avatar "
     + "FROM Friendships, Users, (SELECT id FROM Users WHERE username = ?) AS fID WHERE "
-    + "(Friendships.active = fID.id OR Friendships.passive = fID.id) "
-    + "AND (Users.id <> Friendships.active AND Users.id <> Friendships.passive)";
+    + "(Friendships.active_id = fID.id OR Friendships.passive_id = fID.id) "
+    + "AND (Users.id <> Friendships.active_id AND Users.id <> Friendships.passive_id)";
 
     public FriendsRefreshRequest(DataInputStream in, DataOutputStream out,
                                  Map<Integer, String> hostMap)
@@ -78,11 +77,10 @@ public class FriendsRefreshRequest
         if (success)
         {
             out.writeInt(Handler.SUCCESS);
-            Set<Map.Entry<String, byte[]>> friendsPackets = friends.entrySet();
-            System.out.println("Liczba znajomych: " + friendsPackets.size());
-            out.writeInt(friendsPackets.size());
+            System.out.println("Liczba znajomych: " + friends.size());
+            out.writeInt(friends.size());
             System.out.println("Wczesniej nie ma bledu");
-            for (Map.Entry<String, byte[]> f : friendsPackets)
+            for (Map.Entry<String, byte[]> f : friends.entrySet())
             {
                 out.writeUTF(f.getKey());
                 int bytesCount = f.getValue().length;
