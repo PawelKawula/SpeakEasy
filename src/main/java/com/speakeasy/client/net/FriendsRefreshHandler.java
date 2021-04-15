@@ -21,7 +21,7 @@ public class FriendsRefreshHandler
         friends = new ArrayList<>();
     }
 
-    public void execute(FriendsController controller)
+    public FriendsRefreshHandler execute(FriendsController controller)
     {
         try (Socket s = new Socket(InetAddress.getLocalHost(), ChatServer.chatPort))
         {
@@ -35,14 +35,11 @@ public class FriendsRefreshHandler
             {
                 System.out.println("Udalo sie autoryzowac");
                 int friendCount = in.readInt();
-                System.out.println("Liczba znajomych: " + friendCount);
                 for (int i = 0; i < friendCount; ++i)
                 {
                     String name = in.readUTF();
                     int bytesCount = in.readInt();
-                    System.out.println("Pobrano imie oraz rozmiar byte[] znajomego");
                     byte[] avatarBytes = in.readNBytes(bytesCount);
-                    System.out.println("Pobrano avatar znajomego");
                     File imgFile = new File("cache/images/" + name + ".jpg");
                     if (!imgFile.exists())
                     {
@@ -58,6 +55,7 @@ public class FriendsRefreshHandler
         {
             System.out.println("Friends Refresh unsucessful");
         }
+        return this;
     }
 
     private void refreshFriends(FriendsController controller)

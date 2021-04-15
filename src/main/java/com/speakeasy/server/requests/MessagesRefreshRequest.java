@@ -1,6 +1,7 @@
 package com.speakeasy.server.requests;
 
 import com.speakeasy.client.net.Handler;
+import com.speakeasy.client.net.MessagesRefreshHandler;
 import com.speakeasy.core.database.DatabaseConnection;
 
 import java.io.*;
@@ -18,15 +19,16 @@ public class MessagesRefreshRequest
     private final DataOutputStream out;
     private final Map<LocalDateTime, AbstractMap.SimpleEntry<Boolean, String>> newMessages;
 
-    private final static String query =
+    private final static String base_query =
             "SELECT recipient_ID, creator_id, Messages.create_date, message_body, subject, uID.id, fID.id " +
     "FROM Messages, Users, (Select id FROM Users WHERE username = ?) AS uID, " +
             	"(SELECT id FROM Users WHERE username = ?) as fID WHERE " +
         "((Messages.creator_ID = fID.id AND Messages.recipient_ID = uID.id) OR " +
             	"(Messages.creator_ID = uID.id AND Messages.recipient_id = fID.id) )  AND " +
-        "(Users.id <> Messages.recipient_ID AND Users.id <> Messages.creator_id) AND " +
-    "Messages.create_date > ?";
+        "(Users.id <> Messages.recipient_ID AND Users.id <> Messages.creator_id) AND ";
 
+    private final static String new_query = base_query + "Messages.create_date > ? ORDER BY Messages.create_date DESC";
+    private final static String old_query = base_query + "Messages.create_date < ? ORDER BY Messages.create_date DESC";
 
     public MessagesRefreshRequest(DataInputStream in, DataOutputStream out, Map<Integer, String> hostMap) throws IOException
     {
@@ -48,12 +50,18 @@ public class MessagesRefreshRequest
         }
         out.writeInt(Handler.SUCCESS);
 
+        int type = in.readInt();
         long epoch = in.readLong();
         int nano = in.readInt();
         Timestamp timestamp =
                 Timestamp.valueOf(LocalDateTime.ofEpochSecond(epoch, nano, ZoneOffset.UTC));
         String friendName = in.readUTF();
         System.out.println(friendName);
+        String query;
+        if (type == MessagesRefreshHandler.REFRESH_OLD)
+            query = old_query;
+        else
+            query = new_query;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stat = conn.prepareStatement(query))
@@ -61,6 +69,7 @@ public class MessagesRefreshRequest
             stat.setString(1, username);
             stat.setString(2, friendName);
             stat.setTimestamp(3, timestamp);
+            stat.setMaxRows(10);
             try (ResultSet set = stat.executeQuery())
             {
                 while (set.next())

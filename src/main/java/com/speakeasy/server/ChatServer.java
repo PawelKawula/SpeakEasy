@@ -1,6 +1,5 @@
 package com.speakeasy.server;
 
-import com.speakeasy.client.net.MessagesRefreshHandler;
 import com.speakeasy.server.requests.FriendsRefreshRequest;
 import com.speakeasy.server.requests.LoginRequest;
 import com.speakeasy.server.requests.MessagesRefreshRequest;

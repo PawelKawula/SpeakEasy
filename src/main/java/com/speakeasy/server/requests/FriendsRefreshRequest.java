@@ -77,7 +77,6 @@ public class FriendsRefreshRequest
         if (success)
         {
             out.writeInt(Handler.SUCCESS);
-            System.out.println("Liczba znajomych: " + friends.size());
             out.writeInt(friends.size());
             System.out.println("Wczesniej nie ma bledu");
             for (Map.Entry<String, byte[]> f : friends.entrySet())

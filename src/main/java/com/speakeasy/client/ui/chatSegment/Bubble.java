@@ -2,8 +2,6 @@ package com.speakeasy.client.ui.chatSegment;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.Rectangle2D;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -20,7 +18,6 @@ public class Bubble extends JPanel
     {
         setLayout(new BorderLayout());
         setBorder(null);
-        setOpaque(false);
         messageDialog = new JButton(message);
         add(messageDialog, BorderLayout.CENTER);
         update = true;
@@ -31,9 +28,14 @@ public class Bubble extends JPanel
         messageDialog.setFont(new Font("Deja Vu Sans", Font.BOLD, 12));
     }
 
-
-    public void breakLine(Font f, FontRenderContext fontRenderContext)
+    public void setUpdate(boolean update)
     {
+        this.update = update;
+    }
+
+    public void breakLine()
+    {
+        Font f = getFont();
         String[] words = rawMessage.split("\\s+");
         int i = 0;
         StringBuilder messageBuilder = new StringBuilder();
@@ -41,14 +43,14 @@ public class Bubble extends JPanel
         StringBuilder formattedLineBuilder;
 
         int maxWidthCharCount = 0;
-        Rectangle2D bounds;
 
+        double myWidth;
         do
         {
             maxWidthCharCount += 4;
             messageBuilder.append("MMMM");
-            bounds = f.getStringBounds(messageBuilder.toString(), fontRenderContext);
-        } while (bounds.getWidth() < maxWidth);
+            myWidth = f.getSize() * messageBuilder.length();
+        } while (myWidth < maxWidth);
 
         messageBuilder = new StringBuilder("<html>");
 
@@ -80,7 +82,7 @@ public class Bubble extends JPanel
                     }
                 } while (j < wordLength);
 
-                messageBuilder.append(formattedPartBuilder.toString());
+                messageBuilder.append(formattedPartBuilder);
                 ++i;
             } else
             {
@@ -107,11 +109,11 @@ public class Bubble extends JPanel
             }
 
             formattedLineBuilder.append("<br>");
-            messageBuilder.append(formattedLineBuilder.toString());
+            messageBuilder.append(formattedLineBuilder);
 
         } while (i < words.length);
 
-        messageDialog.setText(messageBuilder.toString() + "</html>");
+        messageDialog.setText(messageBuilder + "</html>");
     }
 
     public JButton getMessageDialog()
@@ -119,16 +121,27 @@ public class Bubble extends JPanel
         return messageDialog;
     }
 
+//    @Override
+//    protected void paintComponent(Graphics g)
+//    {
+//        super.paintComponent(g);
+//        Graphics2D g2 = (Graphics2D) getGraphics();
+//        if (update)
+//        {
+//            Font f = messageDialog.getFont();
+//            FontRenderContext fontRenderContext = g2.getFontRenderContext();
+//            breakLine(f, fontRenderContext);
+//            update = false;
+//        }
+//    }
+
     @Override
-    protected void paintComponent(Graphics g)
+    public void revalidate()
     {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) getGraphics();
+        super.revalidate();
         if (update)
         {
-            Font f = messageDialog.getFont();
-            FontRenderContext fontRenderContext = g2.getFontRenderContext();
-            breakLine(f, fontRenderContext);
+            breakLine();
             update = false;
         }
     }
@@ -148,7 +161,7 @@ public class Bubble extends JPanel
             this.time = time;
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(" yyyy-MM-dd E HH:mm:ss ", Locale.forLanguageTag("pl"));
             timeLabel = new JLabel(time.format(dateTimeFormatter));
-            timeLabel.setFont(new Font(Font.DIALOG, Font.ITALIC, 8));
+            timeLabel.setFont(new Font(Font.DIALOG, Font.ITALIC, 10));
         }
 
         public JLabel getTimeLabel()

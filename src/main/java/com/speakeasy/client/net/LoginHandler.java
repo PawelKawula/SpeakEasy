@@ -21,26 +21,26 @@ public class LoginHandler
         token = Handler.QUERY_FAILURE;
     }
 
-    public void execute()
+    public LoginHandler execute()
     {
         try (Socket s = new Socket(InetAddress.getLocalHost(), ChatServer.chatPort))
-            {
-                DataOutputStream out = new DataOutputStream(s.getOutputStream());
+        {
+            DataOutputStream out = new DataOutputStream(s.getOutputStream());
 
-                out.writeInt(Request.LOGIN_REQUEST);
-                out.writeUTF(credentials.getUserName());
-                out.writeUTF(credentials.getPassword());
-                System.out.println("wyslano");
+            out.writeInt(Request.LOGIN_REQUEST);
+            out.writeUTF(credentials.getUserName());
+            out.writeUTF(credentials.getPassword());
 
-                DataInputStream in = new DataInputStream(s.getInputStream());
-                if (in.readBoolean())
-                    token = in.readInt();
-            }
+            DataInputStream in = new DataInputStream(s.getInputStream());
+            if (in.readBoolean())
+                token = in.readInt();
+        }
         catch (IOException e)
         {
             System.out.println("Logging in not successful due to net error");
             e.printStackTrace();
         }
+            return this;
     }
 
     public int getToken()

@@ -12,8 +12,8 @@ import java.awt.event.MouseEvent;
 public class FriendLabelMouseListener extends MouseAdapter
 {
     private final FriendListItem friendListItem;
-    private FriendsController friendsController;
-    private ChatController chatController;
+    private final FriendsController friendsController;
+    private final ChatController chatController;
 
     public FriendLabelMouseListener(FriendListItem friendListItem)
     {
@@ -38,7 +38,8 @@ public class FriendLabelMouseListener extends MouseAdapter
             prevListItemLabel.repaint();
         }
         chatController.setFriend(friendListItem.getFriend());
-        new MessagesRefreshHandler(chatController.getFriend(), chatController.getToken()).execute();
+        chatController.fetchNewMessages(new MessagesRefreshHandler(chatController.getFriend(),
+                chatController.getToken()).execute().getMessages());
         chatController.updateView();
         friendListItem.getLabel().setForeground(Color.WHITE);
         friendListItem.revalidate();

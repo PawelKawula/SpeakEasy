@@ -9,6 +9,7 @@ public class ChatModel
 {
     Friend previousFriend;
     Friend friend;
+    int token;
 
     public ChatModel()
     {
@@ -21,7 +22,18 @@ public class ChatModel
         this.friend = friend;
     }
 
-    public void addNewMessages(Map<LocalDateTime, Map.Entry<Boolean, String>> newMessages)
+    public void setToken(int token)
+    {
+        this.token = token;
+    }
+
+    public int getToken()
+    {
+        return token;
+    }
+
+
+    public void addMessages(Map<LocalDateTime, Map.Entry<Boolean, String>> newMessages)
     {
         newMessages.forEach((key, value) ->
             {
@@ -56,4 +68,6 @@ public class ChatModel
     {
         return friend != null && friendChanged();
     }
+
+
 }
