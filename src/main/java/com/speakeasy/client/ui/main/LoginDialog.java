@@ -57,8 +57,6 @@ public class LoginDialog extends JDialog
         gbc.gridx = 0;
         add(buttonPanel, gbc);
 
-
-
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener((ev) ->
         {
@@ -80,14 +78,9 @@ public class LoginDialog extends JDialog
                 {
                     parent.setVisible(true);
                     dispose();
-                    FriendsRefreshHandler handler = new FriendsRefreshHandler(token);
-                    handler.execute(controller);
                     controller.getChatController().setToken(token);
+                    new FriendsRefreshHandler(controller).execute();
                 }
-
-
-
-
             }).start();
         });
         buttonPanel.add(confirmButton);

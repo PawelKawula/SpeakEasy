@@ -6,6 +6,8 @@ import com.speakeasy.client.views.FriendsView;
 import com.speakeasy.core.models.Friend;
 
 import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FriendsController
 {
@@ -64,5 +66,41 @@ public class FriendsController
     public Component getSegment()
     {
         return view.getParent();
+    }
+
+    public Set<Friend> getFriends()
+    {
+        return model.getFriends();
+    }
+
+    public int getToken()
+    {
+        return chatController.getToken();
+    }
+
+    public void refreshFriends(Set<Friend> updatedFriends)
+    {
+        Set<Friend> newFriends = new HashSet<>();
+        Set<Friend> deletedFriends = new HashSet<>();
+        Set<Friend> oldFriends = model.getFriends();
+
+        updatedFriends.forEach((f) ->
+            {
+                if (!oldFriends.contains(f))
+                    newFriends.add(f);
+            });
+        oldFriends.forEach((f) ->
+            {
+                if (!updatedFriends.contains(f))
+                    deletedFriends.add(f);
+            });
+        oldFriends.removeAll(deletedFriends);
+        oldFriends.addAll(newFriends);
+
+        view.removeItems(deletedFriends);
+        view.addItems(newFriends, this);
+
+        view.revalidate();
+        view.repaint();
     }
 }

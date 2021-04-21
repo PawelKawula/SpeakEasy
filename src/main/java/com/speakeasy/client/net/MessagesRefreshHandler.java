@@ -110,32 +110,4 @@ public class MessagesRefreshHandler
         return time.toLocalDateTime();
     }
 
-    public static void main(String[] args) throws SQLException, FileNotFoundException
-    {
-//        String query = "INSERT INTO Messages(subject, create_date, creator_id, recipient_id, message_body) VALUES (?, ?, ?, ? , ?)";
-//        try (Connection conn = DatabaseConnection.getConnection();
-//             PreparedStatement stat = conn.prepareStatement(query))
-//        {
-//            Scanner in = new Scanner(new FileInputStream("lorem.txt"));
-//            LocalDateTime localTime = LocalDateTime.of(2009, 12, 14, 12, 14);
-//            while (in.hasNext())
-//            {
-//                int id_1 = ThreadLocalRandom.current().nextInt(2) + 1;
-//                int id_2 = id_1 == 1 ? 2 : 1;
-//                String body = in.nextLine();
-//                localTime = localTime.plusSeconds(ThreadLocalRandom.current().nextInt(3600 * 24) + 10);
-//                stat.setString(1, "None");
-//                stat.setTimestamp(2, Timestamp.from(localTime.toInstant(ZoneOffset.UTC)));
-//                stat.setInt(3, id_1);
-//                stat.setInt(4, id_2);
-//                stat.setClob(5, new SerialClob(body.toCharArray()));
-//                stat.execute();
-//            }
-//        }
-//        ZonedDateTime nowUTC = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC"));
-//        System.out.println(nowUTC);
-        LocalDateTime time = LocalDateTime.now();
-        ZonedDateTime ztime = time.atZone(ZoneId.systemDefault());
-        System.out.println(ztime);
-    }
 }

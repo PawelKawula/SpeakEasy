@@ -1,8 +1,6 @@
 package com.speakeasy.server;
 
-import com.speakeasy.server.requests.FriendsRefreshRequest;
-import com.speakeasy.server.requests.LoginRequest;
-import com.speakeasy.server.requests.MessagesRefreshRequest;
+import com.speakeasy.server.requests.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -41,6 +39,9 @@ public class ChatServer
                             case LOGIN_REQUEST -> new LoginRequest(in, out, hostMap).execute();
                             case FRIENDS_REFRESH -> new FriendsRefreshRequest(in, out, hostMap).execute();
                             case MESSAGES_REFRESH -> new MessagesRefreshRequest(in, out, hostMap).execute();
+                            case FRIEND_REMOVE -> new FriendRemoveRequest(in, out, hostMap).execute();
+                            case FRIEND_ACCEPT -> new FriendAcceptRequest(in, out, hostMap).execute();
+                            case FRIEND_ADD -> new FriendAddRequest(in, out, hostMap).execute();
                             default -> System.out.println("Zly requestType");
                         }
                     }

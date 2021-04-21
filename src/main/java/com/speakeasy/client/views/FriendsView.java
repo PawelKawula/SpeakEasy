@@ -8,6 +8,7 @@ import com.speakeasy.core.models.Friend;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Set;
 
 public class FriendsView extends JPanel
 {
@@ -46,5 +47,15 @@ public class FriendsView extends JPanel
                     remove(comp);
             }
         }
+    }
+
+    public void removeItems(Set<Friend> deletedFriends)
+    {
+        deletedFriends.forEach(this::removeFriendPanel);
+    }
+
+    public void addItems(Set<Friend> newFriends, FriendsController controller)
+    {
+        newFriends.forEach((f) -> addFriendPanel(f, controller));
     }
 }

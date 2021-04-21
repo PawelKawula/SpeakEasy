@@ -2,15 +2,16 @@ package com.speakeasy.client.models;
 
 import com.speakeasy.core.models.Friend;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FriendsModel
 {
-    private final ArrayList<Friend> friends;
+    private final Set<Friend> friends;
 
     public FriendsModel()
     {
-        friends = new ArrayList<>();
+        friends = new HashSet<>();
     }
 
     public void removeFriend(Friend friend)
@@ -23,7 +24,7 @@ public class FriendsModel
         friends.add(friend);
     }
 
-    public ArrayList<Friend> getFriends()
+    public Set<Friend> getFriends()
     {
         return friends;
     }

@@ -10,6 +10,8 @@ import java.util.TreeMap;
 public class Friend
 {
     String nickname;
+    boolean pending;
+    boolean meActive;
 
     static final Dimension AVATAR_MAX_SIZE = new Dimension(128, 128);
 
@@ -19,18 +21,40 @@ public class Friend
     ImageIcon avatar;
     String iconFile;
 
-    public Friend(String nickname, String iconFile)
+    public Friend(String nickname, String iconFile, boolean pending, boolean meActive)
     {
         this.nickname = nickname;
         this.myMessages = new TreeMap<>();
         this.friendMessages = new TreeMap<>();
         this.iconFile = iconFile;
         this.avatar = null;
+        this.pending = pending;
+        this.meActive = meActive;
         if (iconFile != null)
         {
             this.avatar = new ImageIcon(iconFile);
             setAvatar(avatar);
         }
+    }
+
+    public boolean isMeActive()
+    {
+        return meActive;
+    }
+
+    public void setMeActive(boolean meActive)
+    {
+        this.meActive = meActive;
+    }
+
+    public boolean isPending()
+    {
+        return this.pending;
+    }
+
+    public void setPending(boolean pending)
+    {
+        this.pending = pending;
     }
 
     public String getNickname()

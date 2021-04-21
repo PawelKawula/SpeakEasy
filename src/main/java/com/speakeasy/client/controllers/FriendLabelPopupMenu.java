@@ -1,10 +1,13 @@
 package com.speakeasy.client.controllers;
 
+import com.speakeasy.client.net.FriendRemoveHandler;
 import com.speakeasy.client.ui.friendSegment.FriendListItem;
+import com.speakeasy.core.models.Friend;
 import com.speakeasy.utils.ChatConstants;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 
 public class FriendLabelPopupMenu extends JPopupMenu
 {
@@ -19,6 +22,11 @@ public class FriendLabelPopupMenu extends JPopupMenu
 
         deleteItem.addActionListener((event) ->
             {
+                Friend friend = friendListItem.getFriend();
+                int token = chatController.getToken();
+                if (!new FriendRemoveHandler(friend, token).execute().isSuccess())
+                   return;
+
                 if (friendListItem.getFriend() == chatController.getFriend())
                     chatController.setFriend(null);
                 friendsController.removeFriend(friendListItem.getFriend());
@@ -28,5 +36,11 @@ public class FriendLabelPopupMenu extends JPopupMenu
             });
 
         add(deleteItem);
+    }
+
+    public static void main(String[] args)
+    {
+        LocalDate date = LocalDate.of(2021, 8, 1);
+        System.out.println(LocalDate.now().until(date).getMonths() + ", " + LocalDate.now().until(date).getDays());
     }
 }

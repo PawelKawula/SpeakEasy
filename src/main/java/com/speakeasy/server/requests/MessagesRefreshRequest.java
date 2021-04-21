@@ -56,7 +56,6 @@ public class MessagesRefreshRequest
         Timestamp timestamp =
                 Timestamp.valueOf(LocalDateTime.ofEpochSecond(epoch, nano, ZoneOffset.UTC));
         String friendName = in.readUTF();
-        System.out.println(friendName);
         String query;
         if (type == MessagesRefreshHandler.REFRESH_OLD)
             query = old_query;

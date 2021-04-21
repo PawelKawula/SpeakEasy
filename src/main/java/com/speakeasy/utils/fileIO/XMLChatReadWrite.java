@@ -38,7 +38,7 @@ public class XMLChatReadWrite
             }
         }
 
-        friend = new Friend(name, avatar);
+        friend = new Friend(name, avatar, false, true);
 
         while (parser.hasNext())
         {

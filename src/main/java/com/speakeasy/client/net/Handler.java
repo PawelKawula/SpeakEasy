@@ -7,4 +7,5 @@ public interface Handler
     int DATABASE_FAILURE = 2;
     int NO_CHANGE = 3;
 
+    byte[] serverIP = {(byte) 192, (byte) 168, 1, 120};
 }

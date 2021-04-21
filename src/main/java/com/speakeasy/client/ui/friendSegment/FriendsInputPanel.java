@@ -1,7 +1,11 @@
 package com.speakeasy.client.ui.friendSegment;
 
 import com.speakeasy.client.controllers.FriendsController;
+import com.speakeasy.client.net.FriendAddHandler;
+import com.speakeasy.client.net.FriendsRefreshHandler;
 import com.speakeasy.core.models.Friend;
+import com.speakeasy.server.requests.FriendAddRequest;
+import com.speakeasy.server.requests.FriendsRefreshRequest;
 import com.speakeasy.utils.ChatConstants;
 
 import javax.swing.*;
@@ -35,8 +39,12 @@ public class FriendsInputPanel extends JPanel
                 friendsSubmit.getBorder()));
         friendsSubmit.addActionListener((event) ->
             {
-                if (!friendsInput.getText().equals(""))
-                    friendsController.addFriend(new Friend(friendsInput.getText(), null));
+                String fName = friendsInput.getText().trim();
+                if (fName.equals(""))
+                    return;
+                FriendAddHandler handler = new FriendAddHandler(friendsController.getToken(), fName);
+                if (handler.execute().isSuccess())
+                    new FriendsRefreshHandler(friendsController).execute();
             });
         add(friendsSubmit, BorderLayout.EAST);
     }

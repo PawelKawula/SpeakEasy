@@ -18,6 +18,7 @@ public class Bubble extends JPanel
     {
         setLayout(new BorderLayout());
         setBorder(null);
+        setOpaque(false);
         messageDialog = new JButton(message);
         add(messageDialog, BorderLayout.CENTER);
         update = true;
