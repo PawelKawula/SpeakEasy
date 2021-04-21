@@ -56,10 +56,7 @@ public class LoginRequest
             System.out.println("Błąd bazy danych");
             e.printStackTrace();
         }
-        finally
-        {
-            send(token);
-        }
+        send(token);
     }
 
     private void send(int token) throws IOException

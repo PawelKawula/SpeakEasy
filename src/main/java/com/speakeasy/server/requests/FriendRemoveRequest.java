@@ -71,12 +71,12 @@ public class FriendRemoveRequest
                 deleteFriendshipStat.setInt(4, fID);
                 success = deleteFriendshipStat.executeUpdate() != 0;
             }
-            send(success);
         } catch (SQLException e)
         {
             System.out.println("Database failure");
             e.printStackTrace();
         }
+        send(success);
     }
 
     private void send(boolean success) throws IOException

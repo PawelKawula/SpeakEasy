@@ -13,6 +13,7 @@ public class LoginDialog extends JDialog
 {
     private final JTextField loginField;
     private final JPasswordField passwordField;
+    private final JPasswordField repeatPasswordField;
 
     public LoginDialog(SpeakEasyFrame parent, FriendsController controller)
     {
@@ -26,34 +27,50 @@ public class LoginDialog extends JDialog
         gbc.gridwidth = 3;
         add(titleLabel, gbc);
 
+        JPanel modePanel = new JPanel();
+        modePanel.setOpaque(false);
+        gbc.gridy = 1;
+        add(modePanel, gbc);
+
+        JButton loginModeButton = new JButton("Login");
+        modePanel.add(loginModeButton);
+
+        JButton registerModeButton = new JButton("Register");
+        modePanel.add(registerModeButton);
+
         JLabel loginLabel = new JLabel("Username: ");
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = 1;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         add(loginLabel, gbc);
 
         JLabel passwordLabel = new JLabel("Password: ");
         gbc.gridy = 2;
         add(passwordLabel, gbc);
 
-        loginField = new JTextField();
+        JLabel repeatPasswordLabel = new JLabel("Repeat Password: ");
+
+        loginField = new JTextField("test");
         gbc.insets = new Insets(5, 5, 5, 20);
         loginField.setColumns(16);
         gbc.gridx = 2;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         add(loginField, gbc);
 
-        passwordField = new JPasswordField("password");
+        passwordField = new JPasswordField("secret");
         passwordField.setColumns(16);
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridx = 2;
         add(passwordField, gbc);
+
+        repeatPasswordField = new JPasswordField("secret");
+        repeatPasswordField.setColumns(16);
 
         JPanel buttonPanel = new JPanel();
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.weightx = 0;
         gbc.gridwidth = 3;
-        gbc.gridy = 3;
+        gbc.gridy = 5;
         gbc.gridx = 0;
         add(buttonPanel, gbc);
 
@@ -85,6 +102,22 @@ public class LoginDialog extends JDialog
         });
         buttonPanel.add(confirmButton);
         buttonPanel.add(cancelButton);
+
+        registerModeButton.addActionListener((ev) ->
+        {
+            gbc.gridy = 4;
+            gbc.gridx = 0;
+            add(repeatPasswordLabel, gbc);
+            gbc.gridx = 2;
+            add(repeatPasswordField, gbc);
+        });
+
+        loginModeButton.addActionListener((ev) ->
+            {
+                remove(repeatPasswordLabel);
+                remove(repeatPasswordField);
+                confirmButton.setText("R");
+            });
         pack();
     }
 

@@ -1,6 +1,7 @@
 package com.speakeasy.client.ui.chatSegment;
 
 import com.speakeasy.client.controllers.ChatController;
+import com.speakeasy.client.net.MessageSendHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +45,8 @@ public class ChatInputPanel extends JPanel
             if (message.equals(""))
                 return;
 
-            chatController.addMyMessage(LocalDateTime.now(), message);
+            if (new MessageSendHandler(chatController).execute(chatController.getFriend(), message).isSuccess())
+                chatController.addMyMessage(LocalDateTime.now(), message);
         });
 
         add(chatSubmit, BorderLayout.EAST);

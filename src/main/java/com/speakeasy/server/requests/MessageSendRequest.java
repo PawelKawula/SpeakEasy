@@ -3,33 +3,38 @@ package com.speakeasy.server.requests;
 import com.speakeasy.client.net.Handler;
 import com.speakeasy.core.database.DatabaseConnection;
 
+import javax.sql.rowset.serial.SerialClob;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
-public class FriendAddRequest
+public class MessageSendRequest
 {
-    private final DataInputStream in;
+    private  final DataInputStream in;
     private final DataOutputStream out;
     private final Map<Integer, String> hostMap;
 
     private final static String findIdsQuery =
-            "SELECT id, username FROM Users WHERE username = ? or username = ?";
+            "SELECT id, username FROM Users WHERE username = ? or username = ? ";
 
-    private final static String addFriendQuery =
-            "INSERT INTO Friendships(active_id, passive_id, create_time, pending) VALUES(?, ?, ?, 1)";
+    private final static String sendMessageQuery =
+            "INSERT INTO Messages(subject, create_date, creator_id, recipient_id, message_body)" +
+            "VALUES(null, ?, ?, ?, ?)";
 
-    public FriendAddRequest(DataInputStream in, DataOutputStream out, Map<Integer, String> hostMap)
+    public MessageSendRequest(DataInputStream in, DataOutputStream out, Map<Integer, String> hostMap)
     {
         this.in = in;
         this.out = out;
         this.hostMap = hostMap;
     }
 
-    public FriendAddRequest execute() throws IOException
+    public void execute() throws IOException
     {
         String username = hostMap.get(in.readInt());
         boolean success = false;
@@ -37,16 +42,17 @@ public class FriendAddRequest
         if (username == null)
         {
             out.writeInt(Handler.QUERY_FAILURE);
-            return this;
+            return;
         }
         out.writeInt(Handler.SUCCESS);
 
         String fName = in.readUTF();
+        String message = in.readUTF();
         int fID = 0, uID = 0;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement findIdsStatement = conn.prepareStatement(findIdsQuery);
-             PreparedStatement addFriendStatement = conn.prepareStatement(addFriendQuery))
+             PreparedStatement sendMessageStatement = conn.prepareStatement(sendMessageQuery))
         {
             findIdsStatement.setString(1, username);
             findIdsStatement.setString(2, fName);
@@ -60,21 +66,22 @@ public class FriendAddRequest
                         fID = set.getInt("id");
                 }
             }
-            if (fID != 0 && uID != 0)
+            if (fID == 0 || uID == 0)
             {
-                addFriendStatement.setInt(1, uID);
-                addFriendStatement.setInt(2, fID);
-                addFriendStatement.setDate(3,
-                        Date.valueOf(LocalDateTime.now().atZone(ZoneId.of("UTC")).toLocalDate()));
-                success = addFriendStatement.executeUpdate() != 0;
+                send(success);
+                return;
             }
+            LocalDateTime nowUTC = LocalDateTime.now().atZone(ZoneOffset.UTC).toLocalDateTime();
+            sendMessageStatement.setTimestamp(1, Timestamp.valueOf(nowUTC));
+            sendMessageStatement.setInt(2, uID);
+            sendMessageStatement.setInt(3, fID);
+            sendMessageStatement.setClob(4, new SerialClob(message.toCharArray()));
+            success = sendMessageStatement.executeUpdate() != 0;
         } catch (SQLException e)
         {
-            System.out.println("Database failure");
             e.printStackTrace();
         }
         send(success);
-        return this;
     }
 
     private void send(boolean success) throws IOException

@@ -81,10 +81,7 @@ public class MessagesRefreshRequest
             System.out.println("Blad bazy danych");
             e.printStackTrace();
         }
-        finally
-        {
-            send(success);
-        }
+        send(success);
     }
 
     private void send(boolean success) throws IOException

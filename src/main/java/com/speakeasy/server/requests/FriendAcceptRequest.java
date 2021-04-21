@@ -57,23 +57,23 @@ public class FriendAcceptRequest
                 while (set.next())
                 {
                     if (set.getString("username").equals(username))
-                        fID = set.getInt("id");
-                    if (set.getString("username").equals(fName))
                         uID = set.getInt("id");
+                    if (set.getString("username").equals(fName))
+                        fID = set.getInt("id");
                 }
             }
             if (fID != 0 && uID != 0)
             {
-                acceptFriendStatement.setInt(1, uID);
-                acceptFriendStatement.setInt(2, fID);
+                acceptFriendStatement.setInt(1, fID);
+                acceptFriendStatement.setInt(2, uID);
                 success = acceptFriendStatement.executeUpdate() != 0;
             }
-            send(success);
         } catch (SQLException e)
         {
             System.out.println("Database failure");
             e.printStackTrace();
         }
+        send(success);
     }
 
     private void send(boolean success) throws IOException
