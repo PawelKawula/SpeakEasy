@@ -38,17 +38,22 @@ public class LoginDialog extends JDialog
         JButton registerModeButton = new JButton("Register");
         modePanel.add(registerModeButton);
 
-        JLabel loginLabel = new JLabel("Username: ");
+        JLabel loginLabel = new JLabel("Username:");
+        gbc.insets = new Insets(0, 5, 0, 5);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = 1;
         gbc.gridy = 2;
         add(loginLabel, gbc);
 
-        JLabel passwordLabel = new JLabel("Password: ");
-        gbc.gridy = 2;
+        JLabel passwordLabel = new JLabel("Password:");
+        gbc.gridy = 3;
         add(passwordLabel, gbc);
 
-        JLabel repeatPasswordLabel = new JLabel("Repeat Password: ");
+        JLabel repeatPasswordLabel = new JLabel("Repeat Password:");
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        add(repeatPasswordLabel, gbc);
+        repeatPasswordLabel.setVisible(false);
 
         loginField = new JTextField("test");
         gbc.insets = new Insets(5, 5, 5, 20);
@@ -65,6 +70,10 @@ public class LoginDialog extends JDialog
 
         repeatPasswordField = new JPasswordField("secret");
         repeatPasswordField.setColumns(16);
+        gbc.gridy = 4;
+        gbc.gridx = 2;
+        add(repeatPasswordField, gbc);
+        repeatPasswordField.setVisible(false);
 
         JPanel buttonPanel = new JPanel();
         gbc.anchor = GridBagConstraints.CENTER;
@@ -105,18 +114,20 @@ public class LoginDialog extends JDialog
 
         registerModeButton.addActionListener((ev) ->
         {
-            gbc.gridy = 4;
-            gbc.gridx = 0;
-            add(repeatPasswordLabel, gbc);
-            gbc.gridx = 2;
-            add(repeatPasswordField, gbc);
+            repeatPasswordLabel.setVisible(true);
+            repeatPasswordField.setVisible(true);
+            confirmButton.setText("Register");
+            revalidate();
+            pack();
         });
 
         loginModeButton.addActionListener((ev) ->
             {
-                remove(repeatPasswordLabel);
-                remove(repeatPasswordField);
-                confirmButton.setText("R");
+                repeatPasswordLabel.setVisible(false);
+                repeatPasswordField.setVisible(false);
+                confirmButton.setText("Login");
+                revalidate();
+                pack();
             });
         pack();
     }
