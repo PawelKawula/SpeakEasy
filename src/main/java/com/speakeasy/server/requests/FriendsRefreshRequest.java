@@ -2,10 +2,12 @@ package com.speakeasy.server.requests;
 
 import com.speakeasy.client.net.Handler;
 import com.speakeasy.core.database.DatabaseConnection;
+import com.speakeasy.utils.ChatConstants;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.sql.*;
 import java.util.HashSet;
 import java.util.Map;
@@ -68,9 +70,18 @@ public class FriendsRefreshRequest
             {
                 while (set.next())
                 {
+                    byte[] bytes;
                     String uname = set.getString("username");
                     Blob blob = set.getBlob("avatar");
-                    byte[] bytes = blob.getBinaryStream().readAllBytes();
+                    if (blob != null)
+                        bytes = blob.getBinaryStream().readAllBytes();
+                    else
+                    {
+                        BufferedImage bImage = ImageIO.read(new File(ChatConstants.RESOURCE_LOCATION + "images/emptyIcon.png"));
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        ImageIO.write(bImage, "png", bos);
+                        bytes = bos.toByteArray();
+                    }
                     boolean pending = set.getInt("pending") == 1;
                     boolean meActive = set.getInt("id") != set.getInt("active_id");
                     friends.add(new FriendPacket(uname, bytes, pending, meActive));

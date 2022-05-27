@@ -1,0 +1,4 @@
+#!/bin/sh
+
+/derby/bin/startNetworkServer -h 127.0.0.1 &
+java -jar server.jar
