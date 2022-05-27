@@ -9,9 +9,7 @@ COPY database.properties ./database.properties
 COPY src ./src
 COPY docker_cmd ./server
 RUN chmod +x ./server
-#COPY build/libs/chatClient-1.0-SNAPSHOT.jar ./client.jar
 COPY build/libs/chatServer-1.0-SNAPSHOT.jar ./server.jar
-RUN mkdir /app/cache
 
 ENV DERBY_VERSION=10.14.2.0
 ENV DERBY_HOME=/derby
