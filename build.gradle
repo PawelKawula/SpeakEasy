@@ -29,28 +29,42 @@ task cleanClasses(type: Delete){
 
 task runClientRelease(type: JavaExec){
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.speakeasy.client.ChatClient'
+    main = 'com.speakeasy.client.ChatClient'
 }
 
 task runClientDev(type: JavaExec){
     classpath = sourceSets.main.runtimeClasspath
     args '-dev'
-    mainClass = 'com.speakeasy.client.ChatClient'
+    main = 'com.speakeasy.client.ChatClient'
 }
 
 task runServRelease(type: JavaExec){
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.speakeasy.server.ChatServer'
+    main = 'com.speakeasy.server.ChatServer'
 }
 
 task runServDev(type: JavaExec){
     classpath = sourceSets.main.runtimeClasspath
     args '-dev'
-    mainClass = 'com.speakeasy.server.ChatServer'
+    main = 'com.speakeasy.server.ChatServer'
 }
 
 task servJar(type: Jar) {
     manifest.attributes["Main-Class"] = "com.speakeasy.server.ChatServer"
+    archiveBaseName = 'chatServer'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+    with jar
+}
+
+task clientJar(type: Jar) {
+    manifest.attributes["Main-Class"] = "com.speakeasy.client.ChatClient"
+    archiveBaseName = 'chatClient'
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     } {
