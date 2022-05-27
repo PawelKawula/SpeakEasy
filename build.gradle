@@ -48,10 +48,21 @@ task runServDev(type: JavaExec){
     args '-dev'
     main = 'com.speakeasy.server.ChatServer'
 }
+def javaVersion = JavaVersion.VERSION_1_8
 
+//task enforceVersion << {
+//    def foundVersion = JavaVersion.current();
+//    if (foundVersion != javaVersion)
+//        throw new IllegalStateException("Wrong Java version; required is "
+//                + javaVersion + ", but found " + foundVersion);
+//}
+
+//compileJava.dependsOn(enforceVersion);
 task servJar(type: Jar) {
     manifest.attributes["Main-Class"] = "com.speakeasy.server.ChatServer"
-    archiveBaseName = 'chatServer'
+    baseName = 'chatServer'
+    sourceCompatibility = javaVersion;
+    targetCompatibility = javaVersion;
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     } {
@@ -64,7 +75,9 @@ task servJar(type: Jar) {
 
 task clientJar(type: Jar) {
     manifest.attributes["Main-Class"] = "com.speakeasy.client.ChatClient"
-    archiveBaseName = 'chatClient'
+    baseName = 'chatClient'
+    sourceCompatibility = javaVersion;
+    targetCompatibility = javaVersion;
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     } {
@@ -74,3 +87,5 @@ task clientJar(type: Jar) {
     }
     with jar
 }
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11

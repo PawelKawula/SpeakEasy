@@ -22,8 +22,8 @@ RUN wget https://dist.apache.org/repos/dist/release/db/derby/db-derby-${DERBY_VE
     tar xzf /app/db-derby-${DERBY_VERSION}-bin.tar.gz && \
     mv /app/db-derby-${DERBY_VERSION}-bin /derby && \
     echo 'export PATH=$PATH:$DERBY_HOME/bin' >> $HOME/.bashrc && \
-    source ~/.bashrc \
-    rm -Rf /app/*.tar.gz /app/${DERBY_HOME}/demo /app/${DERBY_HOME}/javadoc /app/${DERBY_HOME}/docs /app/${DERBY_HOME}/test /app/${DERBY_HOME}/*.html /app/${DERBY_HOME}/KEYS \
+    source ~/.bashrc && \
+    rm -Rf /app/*.tar.gz /app/${DERBY_HOME}/demo /app/${DERBY_HOME}/javadoc /app/${DERBY_HOME}/docs /app/${DERBY_HOME}/test /app/${DERBY_HOME}/*.html /app/${DERBY_HOME}/KEYS && \
     rm -rf /var/lib/apt/lists/*
 COPY databases ./databases
 

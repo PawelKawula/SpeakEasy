@@ -42,7 +42,9 @@ public class FriendsRefreshHandler
                 {
                     String name = in.readUTF();
                     int bytesCount = in.readInt();
-                    byte[] avatarBytes = in.readNBytes(bytesCount);
+                    //byte[] avatarBytes = in.readNBytes(bytesCount);
+                    byte[] avatarBytes = new byte[bytesCount];
+                    in.readFully(avatarBytes);
                     File imgFile = new File("cache/images/" + name + ".jpg");
                     boolean pending = in.readBoolean();
                     boolean meActive = in.readBoolean();
