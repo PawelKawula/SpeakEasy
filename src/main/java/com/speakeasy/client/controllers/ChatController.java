@@ -52,6 +52,18 @@ public class ChatController
         view.updateView();
     }
 
+    public void refreshMessages()
+    {
+       Map<LocalDateTime, Map.Entry<Boolean, String>> messages =
+               new MessagesRefreshHandler(getFriend(), getToken()).execute().getMessages();
+       if (!messages.isEmpty())
+       {
+           model.addMessages(messages);
+           System.out.println("refreshed messages!");
+           view.updateView();
+       }
+    }
+
     public void updateView()
     {
         view.updateView();

@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class FriendLabelMouseListener extends MouseAdapter
 {
@@ -44,6 +46,8 @@ public class FriendLabelMouseListener extends MouseAdapter
         friendListItem.getLabel().setForeground(Color.WHITE);
         friendListItem.revalidate();
         friendListItem.repaint();
+        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+        executor.scheduleAtFixedRate(() -> chatController.refreshMessages(), 5, 5, TimeUnit.SECONDS);
     }
 
     @Override
